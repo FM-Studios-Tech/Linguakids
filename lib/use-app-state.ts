@@ -346,10 +346,44 @@ export function generateId(prefix: string): string {
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'REPLACE_STATE': {
-      // Ensure we always have a worlds object, even if Firebase returns null/empty
+      const incomingWorlds = action.payload?.worlds || {};
+      const sanitizedWorlds: any = {};
+
+      // Deeply rebuild the tree to guarantee 'levels', 'lessons', and 'data' are never undefined
+      Object.keys(incomingWorlds).forEach((wId) => {
+        const world = incomingWorlds[wId] || {};
+        const incomingLevels = world.levels || {};
+        const sanitizedLevels: any = {};
+        
+        Object.keys(incomingLevels).forEach((lId) => {
+          const level = incomingLevels[lId] || {};
+          const incomingLessons = level.lessons || {};
+          const sanitizedLessons: any = {};
+
+          Object.keys(incomingLessons).forEach((lessonId) => {
+            const lesson = incomingLessons[lessonId] || {};
+            sanitizedLessons[lessonId] = {
+              ...lesson,
+              // Ensure data object and its properties exist
+              data: lesson.data || { learningItems: {}, quizzes: {} }
+            };
+          });
+
+          sanitizedLevels[lId] = {
+            ...level,
+            lessons: sanitizedLessons
+          };
+        });
+
+        sanitizedWorlds[wId] = {
+          ...world,
+          levels: sanitizedLevels
+        };
+      });
+
       return {
         ...action.payload,
-        worlds: action.payload?.worlds || {},
+        worlds: sanitizedWorlds,
       };
     }
     case 'ADD_WORLD': {
