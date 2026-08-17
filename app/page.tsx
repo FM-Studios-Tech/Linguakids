@@ -183,24 +183,31 @@ export default function Home() {
       if (data) {
         // Dispatch the data to your state manager
         app.dispatch({ type: 'REPLACE_STATE', payload: data });
+      } else {
+        // If the database is completely empty, initialize it with an empty structure
+        app.dispatch({ type: 'REPLACE_STATE', payload: { worlds: {} } });
       }
       setIsLoading(false); // Stop loading once data is fetched
     });
     
     // Cleanup subscription on unmount
     return () => unsub();
-  }, []); // Run once on mount
+  }, []);
 
-  // Safely calculate counts (added fallback to {} in case data is empty)
-  const worldCount = Object.keys(app.state.worlds || {}).length;
-  const levelCount = Object.values(app.state.worlds || {}).reduce(
-    (sum: any, w: any) => sum + Object.keys(w.levels || {}).length,
+  // Safely calculate counts (Firebase removes completely empty objects, so we need fallbacks)
+  const safeWorlds = app.state?.worlds || {};
+  
+  const worldCount = Object.keys(safeWorlds).length;
+  
+  const levelCount = Object.values(safeWorlds).reduce(
+    (sum: any, w: any) => sum + Object.keys(w?.levels || {}).length,
     0
   );
-  const lessonCount = Object.values(app.state.worlds || {}).reduce(
+  
+  const lessonCount = Object.values(safeWorlds).reduce(
     (sum: any, w: any) =>
       sum +
-      Object.values(w.levels || {}).reduce((s: any, l: any) => s + Object.keys(l.lessons || {}).length, 0),
+      Object.values(w?.levels || {}).reduce((s: any, l: any) => s + Object.keys(l?.lessons || {}).length, 0),
     0
   );
 
@@ -219,7 +226,10 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-muted-foreground animate-pulse">Loading LinguaKids Data...</p>
+        <div className="flex flex-col items-center gap-4">
+          <Languages className="h-10 w-10 text-primary animate-bounce" />
+          <p className="text-muted-foreground animate-pulse font-medium">Loading LinguaKids Data...</p>
+        </div>
       </div>
     );
   }
@@ -299,20 +309,21 @@ export default function Home() {
             </TabsTrigger>
           </TabsList>
 
+          {/* 3. Passing safe props to tabs to prevent crashes on empty data */}
           <TabsContent value="worlds" className="mt-6">
-            <WorldsTab actions={app} worlds={app.state.worlds} />
+            <WorldsTab actions={app} worlds={safeWorlds} />
           </TabsContent>
 
           <TabsContent value="levels" className="mt-6">
-            <LevelsTab actions={app} worlds={app.state.worlds} />
+            <LevelsTab actions={app} worlds={safeWorlds} />
           </TabsContent>
 
           <TabsContent value="lessons" className="mt-6">
-            <LessonsTab actions={app} worlds={app.state.worlds} />
+            <LessonsTab actions={app} worlds={safeWorlds} />
           </TabsContent>
 
           <TabsContent value="editor" className="mt-6">
-            <LessonEditorTab actions={app} worlds={app.state.worlds} />
+            <LessonEditorTab actions={app} worlds={safeWorlds} />
           </TabsContent>
         </Tabs>
       </main>

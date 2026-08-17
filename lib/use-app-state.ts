@@ -313,7 +313,7 @@ import type {
 } from './types';
 
 type Action =
-  | { type: 'REPLACE_STATE'; payload: AppState } // <-- Added action to accept live data
+  | { type: 'REPLACE_STATE'; payload: any }
   | { type: 'ADD_WORLD'; world: World }
   | { type: 'UPDATE_WORLD'; worldId: string; world: Partial<World> }
   | { type: 'DELETE_WORLD'; worldId: string }
@@ -346,13 +346,17 @@ export function generateId(prefix: string): string {
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'REPLACE_STATE': {
-      return action.payload; // <-- Overwrites entire state with Firebase data
+      // Ensure we always have a worlds object, even if Firebase returns null/empty
+      return {
+        ...action.payload,
+        worlds: action.payload?.worlds || {},
+      };
     }
     case 'ADD_WORLD': {
       const id = generateId('world');
       return {
         ...state,
-        worlds: { ...state.worlds, [id]: action.world },
+        worlds: { ...(state.worlds || {}), [id]: action.world },
       };
     }
     case 'UPDATE_WORLD': {
@@ -380,7 +384,7 @@ function reducer(state: AppState, action: Action): AppState {
           ...state.worlds,
           [action.worldId]: {
             ...world,
-            levels: { ...world.levels, [id]: action.level },
+            levels: { ...(world.levels || {}), [id]: action.level },
           },
         },
       };
@@ -432,7 +436,7 @@ function reducer(state: AppState, action: Action): AppState {
               ...world.levels,
               [action.levelId]: {
                 ...level,
-                lessons: { ...level.lessons, [id]: action.lesson },
+                lessons: { ...(level.lessons || {}), [id]: action.lesson },
               },
             },
           },
@@ -588,7 +592,7 @@ export function useAppState() {
 
   return {
     state,
-    dispatch, // <-- Exporting dispatch so page.tsx can trigger REPLACE_STATE
+    dispatch,
     addWorld,
     updateWorld,
     deleteWorld,
