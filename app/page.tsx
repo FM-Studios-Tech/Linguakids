@@ -211,9 +211,32 @@ export default function Home() {
     0
   );
 
+  // Helper function to recursively remove or replace undefined values with empty strings/null
+  function sanitizeForFirebase(obj: any): any {
+    if (obj === undefined) return null;
+    if (obj === null || typeof obj !== 'object') return obj;
+
+    if (Array.isArray(obj)) {
+      return obj.map(sanitizeForFirebase);
+    }
+
+    const sanitized: any = {};
+    Object.keys(obj).forEach((key) => {
+      const val = obj[key];
+      // If a property is undefined, skip it or set it to ""
+      if (val !== undefined) {
+        sanitized[key] = sanitizeForFirebase(val);
+      }
+    });
+    return sanitized;
+  }
+
   async function handleSave() {
     try {
-      await set(ref(db, 'appState'), app.state);
+      // Clean the state of any undefined values before sending to Firebase
+      const cleanState = sanitizeForFirebase(app.state);
+      
+      await set(ref(db, 'appState'), cleanState);
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
@@ -221,7 +244,6 @@ export default function Home() {
       alert('Save failed — check the console for details.');
     }
   }
-
   // 2. Show a loading screen while fetching from Firebase
   if (isLoading) {
     return (
