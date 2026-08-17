@@ -345,11 +345,17 @@ export function generateId(prefix: string): string {
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
-    case 'REPLACE_STATE': {
-      const incomingWorlds = action.payload?.worlds || {};
+   case 'REPLACE_STATE': {
+      const incomingWorlds = action.payload?.worlds;
+      
+      // If there are no worlds at all, fallback to an empty safe structure
+      if (!incomingWorlds || typeof incomingWorlds !== 'object') {
+        return { worlds: {} };
+      }
+
       const sanitizedWorlds: any = {};
 
-      // Deeply rebuild the tree to guarantee 'levels', 'lessons', and 'data' are never undefined
+      // Deeply sanitize every level, lesson, learning item, and quiz
       Object.keys(incomingWorlds).forEach((wId) => {
         const world = incomingWorlds[wId] || {};
         const incomingLevels = world.levels || {};
@@ -362,10 +368,16 @@ function reducer(state: AppState, action: Action): AppState {
 
           Object.keys(incomingLessons).forEach((lessonId) => {
             const lesson = incomingLessons[lessonId] || {};
+            const lessonData = lesson.data || {};
+
             sanitizedLessons[lessonId] = {
               ...lesson,
-              // Ensure data object and its properties exist
-              data: lesson.data || { learningItems: {}, quizzes: {} }
+              data: {
+                // Ensure learningItems is always an object, never undefined/null
+                learningItems: lessonData.learningItems || {},
+                // Ensure quizzes is always an object, never undefined/null
+                quizzes: lessonData.quizzes || {},
+              }
             };
           });
 
