@@ -6,6 +6,7 @@ export type QuizType = 'text_multiple_choice' | 'audio_multiple_choice' | 'audio
 
 export interface Quiz {
   type: QuizType;
+  order?: number;
   questionText?: string;
   questionAudioUrl?: string;
   correctOptionId?: string;
