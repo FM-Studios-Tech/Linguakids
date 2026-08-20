@@ -2,7 +2,7 @@ export interface QuizOption {
   text: string;
 }
 
-export type QuizType = 'text_multiple_choice' | 'audio_multiple_choice' | 'audio_typing';
+export type QuizType = 'text_multiple_choice' | 'audio_multiple_choice' | 'audio_typing' | 'arabic_voice_record';
 
 export interface Quiz {
   type: QuizType;
@@ -11,6 +11,7 @@ export interface Quiz {
   correctOptionId?: string;
   correctAnswerText?: string;
   options?: Record<string, QuizOption>;
+  arabicPromptText?: string;
 }
 
 export interface LearningItem {
