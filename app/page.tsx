@@ -168,7 +168,7 @@ import { LessonsTab } from '@/components/tabs/lessons-tab';
 import { LessonEditorTab } from '@/components/tabs/lesson-editor-tab';
 import { ref, set, onValue } from 'firebase/database';
 import { db } from '@/lib/firebase';
-
+ import Image from "next/image";
 export default function Home() {
   const app = useAppState();
   const [saved, setSaved] = useState(false);
@@ -250,7 +250,7 @@ export default function Home() {
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Languages className="h-10 w-10 text-primary animate-bounce" />
-          <p className="text-muted-foreground animate-pulse font-medium">Loading LinguaKids Data...</p>
+          <p className="text-muted-foreground animate-pulse font-medium">Loading English Plus Data...</p>
         </div>
       </div>
     );
@@ -262,20 +262,26 @@ export default function Home() {
       <header className="sticky top-0 z-40 border-b bg-card/80 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
+           
+
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-                <Languages className="h-5.5 w-5.5" />
-              </div>
+              <Image
+                src="/logo.png"
+                alt="English Plus Logo"
+                width={40}
+                height={40}
+                className="h-10 w-10 rounded-xl object-cover shadow-sm"
+              />
               <div>
                 <h1 className="text-lg font-semibold text-foreground leading-tight">
-                  LinguaKids
+                  English Plus
                 </h1>
                 <p className="text-xs text-muted-foreground leading-tight">
                   Admin Panel
                 </p>
               </div>
             </div>
-
+            
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">

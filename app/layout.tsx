@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'LinguaKids Admin — Content Management',
+  title: 'English Plus Admin ',
   description: 'Premium admin panel for managing kids language learning content',
 };
 
