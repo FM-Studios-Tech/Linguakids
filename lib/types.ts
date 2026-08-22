@@ -13,6 +13,7 @@ export interface Quiz {
   correctAnswerText?: string;
   options?: Record<string, QuizOption>;
   arabicPromptText?: string;
+  englishPromptText?: string;
 }
 
 export interface LearningItem {

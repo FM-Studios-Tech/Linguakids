@@ -1300,7 +1300,7 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
                       className="gap-2 border-dashed"
                     >
                       <Mic className="h-4 w-4" />
-                      Arabic Voice Record
+                      Reading Quiz
                     </Button>
                   </div>
                 </div>

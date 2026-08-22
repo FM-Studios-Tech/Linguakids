@@ -792,7 +792,7 @@ export const QUIZ_TYPE_LABELS: Record<QuizType, string> = {
   text_multiple_choice: 'Text Multiple Choice',
   audio_multiple_choice: 'Audio Multiple Choice',
   audio_typing: 'Audio Typing',
-  arabic_voice_record: 'Arabic Voice Record',
+  arabic_voice_record: 'Reading Quiz',
 };
 
 export const QUIZ_TYPE_ICONS: Record<QuizType, React.ReactNode> = {
@@ -1104,15 +1104,22 @@ export function QuizCard({ quizId, index, total, quiz, onChange, onRemove, onMov
             <div className="space-y-1.5">
               <Label className="text-xs flex items-center gap-1">
                 <Languages className="h-3 w-3" />
-                Arabic Text to Display
+                English Text to Display
               </Label>
               <Input
+              value={quiz.englishPromptText || ''}
+              onChange={(e) => onChange(quizId, { englishPromptText: e.target.value })}
+              placeholder="Type the English text here..."
+              className="bg-background"
+              dir="ltr" 
+            />
+              {/* <Input
                 value={quiz.arabicPromptText || ''}
                 onChange={(e) => onChange(quizId, { arabicPromptText: e.target.value })}
                 placeholder="اكتب النص العربي هنا..."
                 className="bg-background"
                 dir="rtl"
-              />
+              /> */}
               {/* <p className="text-xs text-muted-foreground">
                 This Arabic text will be shown to the student. The student answers by recording their voice.
               </p> */}
