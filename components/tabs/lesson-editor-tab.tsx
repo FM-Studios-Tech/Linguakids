@@ -837,6 +837,7 @@ import {
   ListChecks,
   Headphones,
   Languages,
+  Grid3X3,
 } from 'lucide-react';
 import {
   Card,
@@ -846,6 +847,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -863,7 +866,14 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import type { AppActions } from '@/lib/use-app-state';
-import type { World, Lesson, LearningItem, Quiz, QuizType } from '@/lib/types';
+import type {
+  World,
+  Lesson,
+  LearningItem,
+  LearningGridCell as LearningGridCellData,
+  Quiz,
+  QuizType,
+} from '@/lib/types';
 import {
   LearningItemCard,
   createEmptyLearningItem,
@@ -886,6 +896,8 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
   const [selectedWorldId, setSelectedWorldId] = useState<string>('');
   const [selectedLevelId, setSelectedLevelId] = useState<string>('');
   const [selectedLessonId, setSelectedLessonId] = useState<string>('');
+  const [gridRows, setGridRows] = useState(1);
+  const [gridColumns, setGridColumns] = useState(1);
 
   const worldEntries = Object.entries(worlds).sort(([, a], [, b]) => a.order - b.order);
   const selectedWorld = selectedWorldId ? worlds[selectedWorldId] : null;
@@ -900,8 +912,10 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
 
   const learningItemEntries = useMemo(() => {
     if (!lessonData) return [];
-    return Object.entries(lessonData.learningItems);
+    return Object.entries(lessonData.learningItems.items);
   }, [lessonData]);
+
+  const learningItemCount = learningItemEntries.length;
 
   const quizEntries = useMemo(() => {
     if (!lessonData) return [];
@@ -945,33 +959,119 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
     setSelectedLessonId('');
   }
 
-  function updateLearningItem(itemId: string, patch: Partial<LearningItem>) {
+  function handleLessonChange(id: string) {
+    setSelectedLessonId(id);
+    const data = selectedLevel?.lessons[id]?.data;
+    const gridSize = data?.learningItems.gridSize;
+    setGridRows(gridSize?.rows || 1);
+    setGridColumns(gridSize?.columns || 1);
+  }
+
+  function applyGridLayout() {
     if (!lessonData || !selectedWorldId || !selectedLevelId || !selectedLessonId) return;
-    const newItem: LearningItem = { ...lessonData.learningItems[itemId], ...patch };
-    const newItems = { ...lessonData.learningItems, [itemId]: newItem };
+
+    const rows = Math.min(4, Math.max(1, Math.floor(gridRows || 1)));
+    const columns = Math.min(2, Math.max(1, Math.floor(gridColumns || 1)));
+    const items = Object.fromEntries(
+      Object.entries(lessonData.learningItems.items).map(([itemId, item]) => {
+        const resizedItem = createEmptyLearningItem(rows, columns);
+        Object.keys(resizedItem.cells).forEach((cellId) => {
+          if (item.cells[cellId]) resizedItem.cells[cellId] = item.cells[cellId];
+        });
+        return [itemId, resizedItem];
+      })
+    );
+
+    setGridRows(rows);
+    setGridColumns(columns);
     actions.updateLessonData(selectedWorldId, selectedLevelId, selectedLessonId, {
       ...lessonData,
-      learningItems: newItems,
+      learningItems: {
+        ...lessonData.learningItems,
+        gridSize: { rows, columns },
+        items,
+      },
+    });
+  }
+
+  function updateLearningItemsName(name: string) {
+    if (!lessonData || !selectedWorldId || !selectedLevelId || !selectedLessonId) return;
+
+    actions.updateLessonData(selectedWorldId, selectedLevelId, selectedLessonId, {
+      ...lessonData,
+      learningItems: {
+        ...lessonData.learningItems,
+        name,
+      },
+    });
+  }
+
+  function updateLearningItemsDescription(description: string) {
+    if (!lessonData || !selectedWorldId || !selectedLevelId || !selectedLessonId) return;
+
+    actions.updateLessonData(selectedWorldId, selectedLevelId, selectedLessonId, {
+      ...lessonData,
+      learningItems: {
+        ...lessonData.learningItems,
+        description,
+      },
+    });
+  }
+
+  function updateLearningItemCell(
+    itemId: string,
+    cellId: string,
+    cell: LearningGridCellData
+  ) {
+    if (
+      !lessonData ||
+      !selectedWorldId ||
+      !selectedLevelId ||
+      !selectedLessonId
+    ) return;
+
+    actions.updateLessonData(selectedWorldId, selectedLevelId, selectedLessonId, {
+      ...lessonData,
+      learningItems: {
+        ...lessonData.learningItems,
+        items: {
+          ...lessonData.learningItems.items,
+          [itemId]: {
+            ...lessonData.learningItems.items[itemId],
+            cells: {
+              ...lessonData.learningItems.items[itemId].cells,
+              [cellId]: cell,
+            },
+          },
+        },
+      },
     });
   }
 
   function addLearningItem() {
     if (!lessonData || !selectedWorldId || !selectedLevelId || !selectedLessonId) return;
     const id = newLearningItemId();
-    const item = createEmptyLearningItem();
-    const newItems = { ...lessonData.learningItems, [id]: item };
+    const { rows, columns } = lessonData.learningItems.gridSize;
+    const item = createEmptyLearningItem(rows || 1, columns || 1);
+    const newItems = {
+      ...(lessonData.learningItems.items as Record<string, LearningItem>),
+      [id]: item,
+    };
     actions.updateLessonData(selectedWorldId, selectedLevelId, selectedLessonId, {
       ...lessonData,
-      learningItems: newItems,
+      learningItems: { ...lessonData.learningItems, items: newItems },
     });
   }
 
   function removeLearningItem(itemId: string) {
     if (!lessonData || !selectedWorldId || !selectedLevelId || !selectedLessonId) return;
-    const { [itemId]: _, ...rest } = lessonData.learningItems;
+    const { [itemId]: _, ...rest } = lessonData.learningItems.items as Record<
+      string,
+      LearningItem
+    >;
     actions.updateLessonData(selectedWorldId, selectedLevelId, selectedLessonId, {
       ...lessonData,
-      learningItems: rest,
+      learningItems: { ...lessonData.learningItems, items: rest },
     });
   }
 
@@ -1099,7 +1199,7 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
               </Label>
               <Select
                 value={selectedLessonId}
-                onValueChange={setSelectedLessonId}
+                onValueChange={handleLessonChange}
                 disabled={!selectedLevel}
               >
                 <SelectTrigger>
@@ -1143,16 +1243,92 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
                       Learning Items
                     </div>
                     <div className="text-xs text-muted-foreground font-normal">
-                      {learningItemEntries.length} item{learningItemEntries.length !== 1 ? 's' : ''}
+                      {learningItemCount} item{learningItemCount !== 1 ? 's' : ''}
                     </div>
                   </div>
                   <Badge variant="secondary" className="ml-2">
-                    {learningItemEntries.length}
+                    {learningItemCount}
                   </Badge>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
                 <div className="space-y-4 pt-2">
+                  <Card className="border-primary/20 bg-primary/5">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-base">
+                        <Grid3X3 className="h-4 w-4 text-primary" />
+                        Learning Grid Setup
+                      </CardTitle>
+                      <CardDescription>
+                        Choose the cells in every learning item. Each cell independently stores its position, language, text, and optional audio.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="mb-4 space-y-1.5">
+                        <Label htmlFor="learning-items-name">Name (Arabic)</Label>
+                        <Input
+                          id="learning-items-name"
+                          value={lessonData.learningItems.name}
+                          onChange={(event) => updateLearningItemsName(event.target.value)}
+                          placeholder="مثال: كلمات الأبجدية"
+                          dir="rtl"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          One shared Arabic name for all learning items in this lesson.
+                        </p>
+                      </div>
+                      <div className="mb-4 space-y-1.5">
+                        <Label htmlFor="learning-items-description">
+                          Description (Arabic)
+                        </Label>
+                        <Textarea
+                          id="learning-items-description"
+                          value={lessonData.learningItems.description}
+                          onChange={(event) =>
+                            updateLearningItemsDescription(event.target.value)
+                          }
+                          placeholder="مثال: تعلّم الحروف والكلمات الجديدة"
+                          dir="rtl"
+                          rows={3}
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          One shared Arabic description for this learning-items group.
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-1 gap-3 border-t pt-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+                        <div className="space-y-1.5">
+                          <Label htmlFor="learning-grid-rows">Rows</Label>
+                          <Input
+                            id="learning-grid-rows"
+                            type="number"
+                            min={1}
+                            max={4}
+                            value={gridRows}
+                            onChange={(event) => setGridRows(Number(event.target.value))}
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="learning-grid-columns">Columns</Label>
+                          <Input
+                            id="learning-grid-columns"
+                            type="number"
+                            min={1}
+                            max={2}
+                            value={gridColumns}
+                            onChange={(event) => setGridColumns(Number(event.target.value))}
+                          />
+                        </div>
+                        <Button onClick={applyGridLayout} className="gap-2">
+                          <Grid3X3 className="h-4 w-4" />
+                          Apply Grid
+                        </Button>
+                      </div>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        Up to 4 rows and 2 columns. Resizing updates every item and preserves cells that remain.
+                      </p>
+                    </CardContent>
+                  </Card>
+
                   {learningItemEntries.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-12 text-center rounded-lg bg-muted/30 border border-dashed">
                       <FileText className="h-8 w-8 text-muted-foreground mb-3" />
@@ -1160,7 +1336,7 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
                         No learning items yet
                       </p>
                       <p className="text-sm text-muted-foreground mt-1 mb-4">
-                        Add a learning item with letter, word, and audio.
+                        Set the grid size, then add a learning item.
                       </p>
                     </div>
                   )}
@@ -1170,7 +1346,8 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
                       itemId={itemId}
                       index={index}
                       item={item}
-                      onChange={updateLearningItem}
+                      gridSize={lessonData.learningItems.gridSize}
+                      onCellChange={updateLearningItemCell}
                       onRemove={removeLearningItem}
                     />
                   ))}

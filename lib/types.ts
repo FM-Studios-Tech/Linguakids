@@ -17,15 +17,33 @@ export interface Quiz {
 }
 
 export interface LearningItem {
-  englishLetter: string;
-  englishWord: string;
-  arabicWord: string;
-  audioUrlLetter: string;
-  audioUrlWord: string;
+  cells: Record<string, LearningGridCell>;
+}
+
+export type LearningCellLanguage = 'english' | 'arabic';
+
+export interface LearningGridCell {
+  row: number;
+  column: number;
+  language: LearningCellLanguage;
+  text: string;
+  audioUrl: string;
+}
+
+export interface GridSize {
+  rows: number;
+  columns: number;
+}
+
+export interface LearningItemsCollection {
+  name: string;
+  description: string;
+  gridSize: GridSize;
+  items: Record<string, LearningItem>;
 }
 
 export interface LessonData {
-  learningItems: Record<string, LearningItem>;
+  learningItems: LearningItemsCollection;
   quizzes: Record<string, Quiz>;
 }
 
@@ -44,6 +62,8 @@ export interface Level {
 export interface World {
   title: string;
   order: number;
+  buttonImageUrl: string;
+  backgroundImageUrl: string;
   levels: Record<string, Level>;
 }
 

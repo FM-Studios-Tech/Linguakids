@@ -253,7 +253,7 @@ export function AudioUploader({
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         className={cn(
-          'flex items-center gap-2 rounded-md border border-dashed p-1.5 transition-colors',
+          'flex min-w-0 flex-col items-stretch gap-2 rounded-md border border-dashed p-1.5 transition-colors sm:flex-row sm:items-center',
           isDragging
             ? 'border-primary bg-primary/10'
             : 'border-input bg-background'
@@ -263,7 +263,7 @@ export function AudioUploader({
           type="button"
           variant="outline"
           size="sm"
-          className="gap-1.5 shrink-0"
+          className="w-full gap-1.5 shrink-0 sm:w-auto"
           onClick={() => inputRef.current?.click()}
           disabled={status === 'uploading'}
         >

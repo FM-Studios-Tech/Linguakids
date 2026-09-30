@@ -11,6 +11,7 @@ import {
   Save,
   X,
 } from 'lucide-react';
+import { ImageUploader } from './image-uploader';
 import {
   Card,
   CardContent,
@@ -61,6 +62,8 @@ export function WorldsTab({ actions, worlds }: WorldsTabProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formTitle, setFormTitle] = useState('');
   const [formOrder, setFormOrder] = useState(1);
+  const [formButtonImageUrl, setFormButtonImageUrl] = useState('');
+  const [formBackgroundImageUrl, setFormBackgroundImageUrl] = useState('');
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const worldEntries = Object.entries(worlds).sort(
@@ -70,6 +73,8 @@ export function WorldsTab({ actions, worlds }: WorldsTabProps) {
   function openAdd() {
     setEditingId(null);
     setFormTitle('');
+    setFormButtonImageUrl('');
+    setFormBackgroundImageUrl('');
     setFormOrder(
       worldEntries.length > 0
         ? Math.max(...worldEntries.map(([, w]) => w.order)) + 1
@@ -82,6 +87,8 @@ export function WorldsTab({ actions, worlds }: WorldsTabProps) {
     setEditingId(id);
     setFormTitle(world.title);
     setFormOrder(world.order);
+    setFormButtonImageUrl(world.buttonImageUrl ?? '');
+    setFormBackgroundImageUrl(world.backgroundImageUrl ?? '');
     setDialogOpen(true);
   }
 
@@ -90,10 +97,17 @@ export function WorldsTab({ actions, worlds }: WorldsTabProps) {
     const world: World = {
       title: formTitle.trim(),
       order: formOrder,
+      buttonImageUrl: formButtonImageUrl,
+      backgroundImageUrl: formBackgroundImageUrl,
       levels: editingId ? worlds[editingId].levels : {},
     };
     if (editingId) {
-      actions.updateWorld(editingId, { title: formTitle.trim(), order: formOrder });
+      actions.updateWorld(editingId, {
+        title: formTitle.trim(),
+        order: formOrder,
+        buttonImageUrl: formButtonImageUrl,
+        backgroundImageUrl: formBackgroundImageUrl,
+      });
     } else {
       actions.addWorld({ ...world, levels: {} });
     }
@@ -216,19 +230,19 @@ export function WorldsTab({ actions, worlds }: WorldsTabProps) {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
+        <DialogContent className="grid max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] grid-rows-[auto_minmax(0,1fr)_auto] gap-3 overflow-hidden p-4 sm:max-w-xl sm:gap-4 sm:p-6">
+          <DialogHeader className="min-w-0 pr-8 text-left">
+            <DialogTitle className="flex items-center gap-2 leading-snug">
               <Globe className="h-5 w-5 text-primary" />
               {editingId ? 'Edit World' : 'Add New World'}
             </DialogTitle>
             <DialogDescription>
               {editingId
-                ? 'Update the title and order of this world.'
-                : 'Create a new learning world.'}
+                ? 'Update this world and its images.'
+                : 'Create a new learning world and upload its images.'}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-2">
+          <div className="min-h-0 space-y-4 overflow-y-auto px-1 py-2 scrollbar-thin">
             <div className="space-y-2">
               <Label htmlFor="world-title">World Title</Label>
               <Input
@@ -249,13 +263,37 @@ export function WorldsTab({ actions, worlds }: WorldsTabProps) {
                 onChange={(e) => setFormOrder(Number(e.target.value))}
               />
             </div>
+            <div className="space-y-2">
+              <Label>Button Image</Label>
+              <ImageUploader
+                value={formButtonImageUrl}
+                onChange={setFormButtonImageUrl}
+                label="Upload Button Image"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Background Image</Label>
+              <ImageUploader
+                value={formBackgroundImageUrl}
+                onChange={setFormBackgroundImageUrl}
+                label="Upload Background Image"
+              />
+            </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+          <DialogFooter className="gap-2 border-t pt-3 sm:space-x-0">
+            <Button
+              variant="outline"
+              onClick={() => setDialogOpen(false)}
+              className="w-full sm:w-auto"
+            >
               <X className="h-4 w-4 mr-1" />
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={!formTitle.trim()}>
+            <Button
+              onClick={handleSave}
+              disabled={!formTitle.trim()}
+              className="w-full sm:w-auto"
+            >
               <Save className="h-4 w-4 mr-1" />
               {editingId ? 'Save Changes' : 'Create World'}
             </Button>

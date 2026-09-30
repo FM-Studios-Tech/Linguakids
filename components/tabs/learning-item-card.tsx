@@ -1,20 +1,27 @@
 'use client';
 
-import { Trash2, Type, Languages, AudioLines, Volume2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { AudioUploader } from './audio-uploader';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import type {
+  GridSize,
+  LearningGridCell as LearningGridCellData,
+  LearningItem,
+} from '@/lib/types';
 import { generateId } from '@/lib/use-app-state';
-import type { LearningItem } from '@/lib/types';
+import { LearningGridCell } from './learning-grid-cell';
 
 interface LearningItemCardProps {
   itemId: string;
   index: number;
   item: LearningItem;
-  onChange: (itemId: string, patch: Partial<LearningItem>) => void;
+  gridSize: GridSize;
+  onCellChange: (
+    itemId: string,
+    cellId: string,
+    cell: LearningGridCellData
+  ) => void;
   onRemove: (itemId: string) => void;
 }
 
@@ -22,96 +29,56 @@ export function LearningItemCard({
   itemId,
   index,
   item,
-  onChange,
+  gridSize,
+  onCellChange,
   onRemove,
 }: LearningItemCardProps) {
+  const cellEntries = Object.entries(item.cells).sort(
+    ([, a], [, b]) => a.row - b.row || a.column - b.column
+  );
+
   return (
     <Card className="bg-muted/30 border-border/60">
-      <CardContent className="p-5">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary font-semibold text-sm">
+      <CardContent className="p-4 sm:p-5">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-sm font-semibold text-primary">
               {index + 1}
             </div>
-            <span className="text-sm font-medium text-foreground">
-              Learning Item
-            </span>
-            <Badge variant="outline" className="font-mono text-xs">
-              {itemId.slice(-6)}
+            <span className="text-sm font-medium text-foreground">Learning Item</span>
+            <Badge variant="outline" className="truncate font-mono text-xs">
+              {itemId.slice(-8)}
             </Badge>
           </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => onRemove(itemId)}
-            className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
+            className="h-8 w-8 shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+            aria-label="Remove learning item"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs flex items-center gap-1">
-              <Type className="h-3 w-3" />
-              English Letter
-            </Label>
-            <Input
-              value={item.englishLetter}
-              onChange={(e) => onChange(itemId, { englishLetter: e.target.value })}
-              placeholder="A"
-              className="bg-background"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs flex items-center gap-1">
-              <Type className="h-3 w-3" />
-              English Word
-            </Label>
-            <Input
-              value={item.englishWord}
-              onChange={(e) => onChange(itemId, { englishWord: e.target.value })}
-              placeholder="Apple"
-              className="bg-background"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs flex items-center gap-1">
-              <Languages className="h-3 w-3" />
-              Arabic Word
-            </Label>
-            <Input
-              value={item.arabicWord}
-              onChange={(e) => onChange(itemId, { arabicWord: e.target.value })}
-              placeholder="تُفَّاح"
-              className="bg-background"
-              dir="rtl"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs flex items-center gap-1">
-              <AudioLines className="h-3 w-3" />
-              Letter Audio
-            </Label>
-            <AudioUploader
-              value={item.audioUrlLetter}
-              onChange={(url) => onChange(itemId, { audioUrlLetter: url })}
-              label="Upload Letter Audio"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label className="text-xs flex items-center gap-1">
-              <Volume2 className="h-3 w-3" />
-              Word Audio
-            </Label>
-            <AudioUploader
-              value={item.audioUrlWord}
-              onChange={(url) => onChange(itemId, { audioUrlWord: url })}
-              label="Upload Word Audio"
-            />
+        <div className="overflow-x-auto pb-2 scrollbar-thin">
+          <div
+            className="grid gap-3"
+            style={{
+              gridTemplateColumns: `repeat(${gridSize.columns}, minmax(260px, 1fr))`,
+              minWidth: `max(100%, ${gridSize.columns * 280}px)`,
+            }}
+          >
+            {cellEntries.map(([cellId, cell]) => (
+              <LearningGridCell
+                key={cellId}
+                cellId={cellId}
+                cell={cell}
+                onChange={(changedCellId, changedCell) =>
+                  onCellChange(itemId, changedCellId, changedCell)
+                }
+              />
+            ))}
           </div>
         </div>
       </CardContent>
@@ -119,14 +86,23 @@ export function LearningItemCard({
   );
 }
 
-export function createEmptyLearningItem(): LearningItem {
-  return {
-    englishLetter: '',
-    englishWord: '',
-    arabicWord: '',
-    audioUrlLetter: '',
-    audioUrlWord: '',
-  };
+export function createEmptyLearningItem(rows: number, columns: number): LearningItem {
+  const cells: Record<string, LearningGridCellData> = {};
+
+  for (let row = 1; row <= rows; row += 1) {
+    for (let column = 1; column <= columns; column += 1) {
+      const cellId = `cell_${row}_${column}`;
+      cells[cellId] = {
+        row,
+        column,
+        language: 'english',
+        text: '',
+        audioUrl: '',
+      };
+    }
+  }
+
+  return { cells };
 }
 
 export function newLearningItemId(): string {

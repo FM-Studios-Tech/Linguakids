@@ -308,6 +308,7 @@ import type {
   Level,
   Lesson,
   LessonData,
+  LearningGridCell,
   LearningItem,
   Quiz,
 } from './types';
@@ -369,12 +370,102 @@ function reducer(state: AppState, action: Action): AppState {
           Object.keys(incomingLessons).forEach((lessonId) => {
             const lesson = incomingLessons[lessonId] || {};
             const lessonData = lesson.data || {};
+            const incomingCollection = lessonData.learningItems || {};
+            const isWrappedCollection =
+              incomingCollection.items && typeof incomingCollection.items === 'object';
+            const incomingLearningItems = isWrappedCollection
+              ? incomingCollection.items
+              : incomingCollection;
+            const sanitizedLearningItems: Record<string, LearningItem> = {};
+            const incomingGrid = lessonData.learningItemsGrid;
+            const looksLikeGrid = Object.values(incomingLearningItems).some(
+              (item: any) => item && ('language' in item || 'row' in item || 'column' in item)
+            );
+            const wasLessonLevelGrid =
+              lessonData.learningItemsMode === 'grid' || Boolean(incomingGrid) || looksLikeGrid;
+
+            const sanitizeCells = (
+              rawCells: Record<string, any>
+            ): Record<string, LearningGridCell> =>
+              Object.fromEntries(
+                Object.entries(rawCells).map(([cellId, rawCell]: [string, any]) => [
+                  cellId,
+                  {
+                    row: Number(rawCell?.row) || 1,
+                    column: Number(rawCell?.column) || 1,
+                    language: (rawCell?.language === 'arabic'
+                      ? 'arabic'
+                      : 'english') as 'arabic' | 'english',
+                    text: rawCell?.text ?? '',
+                    audioUrl: rawCell?.audioUrl ?? '',
+                  },
+                ])
+              );
+
+            if (wasLessonLevelGrid) {
+              const rawGridCells = incomingGrid?.cells || incomingLearningItems;
+              sanitizedLearningItems.item_grid = { cells: sanitizeCells(rawGridCells) };
+            } else {
+              Object.keys(incomingLearningItems).forEach((itemId) => {
+                const item = incomingLearningItems[itemId] || {};
+
+                if (item.cells && typeof item.cells === 'object') {
+                  sanitizedLearningItems[itemId] = {
+                    cells: sanitizeCells(item.cells),
+                  };
+                  return;
+                }
+
+                // Migrate fixed ItemA/ItemB/ItemC and older flat records to
+                // explicit, unlimited cells with Unity-friendly coordinates.
+                sanitizedLearningItems[itemId] = {
+                  cells: {
+                    cell_1_1: {
+                      row: 1,
+                      column: 1,
+                      language: 'english',
+                      text: item.ItemA?.englishLetter ?? item.englishLetter ?? '',
+                      audioUrl:
+                        item.ItemA?.audioUrlLetter ?? item.audioUrlLetter ?? '',
+                    },
+                    cell_2_1: {
+                      row: 2,
+                      column: 1,
+                      language: 'english',
+                      text: item.ItemB?.englishWord ?? item.englishWord ?? '',
+                      audioUrl: item.ItemB?.audioUrlWord ?? item.audioUrlWord ?? '',
+                    },
+                    cell_3_1: {
+                      row: 3,
+                      column: 1,
+                      language: 'arabic',
+                      text: item.ItemC?.arabicWord ?? item.arabicWord ?? '',
+                      audioUrl:
+                        item.ItemC?.audioUrlArabic ?? item.audioUrlArabic ?? '',
+                    },
+                  },
+                };
+              });
+            }
+
+            const incomingGridSize =
+              incomingCollection.gridSize || lessonData.gridSize || incomingGrid;
+            const gridSize = incomingGridSize
+              ? {
+                  rows: Number(incomingGridSize.rows) || 0,
+                  columns: Number(incomingGridSize.columns) || 0,
+                }
+              : { rows: 3, columns: 1 };
 
             sanitizedLessons[lessonId] = {
               ...lesson,
               data: {
-                // Ensure learningItems is always an object, never undefined/null
-                learningItems: lessonData.learningItems || {},
+                learningItems: {
+                  name: incomingCollection.name ?? 'عناصر التعلم',
+                  description: incomingCollection.description ?? '',
+                  gridSize,
+                  items: sanitizedLearningItems,
+                },
                 // Ensure quizzes is always an object, never undefined/null
                 quizzes: lessonData.quizzes || {},
               }
@@ -389,6 +480,8 @@ function reducer(state: AppState, action: Action): AppState {
 
         sanitizedWorlds[wId] = {
           ...world,
+          buttonImageUrl: world.buttonImageUrl ?? '',
+          backgroundImageUrl: world.backgroundImageUrl ?? '',
           levels: sanitizedLevels
         };
       });

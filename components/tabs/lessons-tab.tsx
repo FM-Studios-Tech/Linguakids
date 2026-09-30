@@ -118,7 +118,15 @@ export function LessonsTab({ actions, worlds }: LessonsTabProps) {
       actions.addLesson(selectedWorldId, selectedLevelId, {
         title: formTitle.trim(),
         order: formOrder,
-        data: { learningItems: {}, quizzes: {} },
+        data: {
+          learningItems: {
+            name: '',
+            description: '',
+            gridSize: { rows: 0, columns: 0 },
+            items: {},
+          },
+          quizzes: {},
+        },
       });
     }
     setDialogOpen(false);
@@ -252,7 +260,7 @@ export function LessonsTab({ actions, worlds }: LessonsTabProps) {
                       <TableCell className="text-center">
                         <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
                           <FileText className="h-3.5 w-3.5" />
-                          {Object.keys(lesson.data.learningItems).length}
+                          {Object.keys(lesson.data.learningItems.items).length}
                         </span>
                       </TableCell>
                       <TableCell className="text-center">

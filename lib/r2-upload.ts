@@ -9,14 +9,14 @@ const r2 = new S3Client({
   },
 });
 
-export async function uploadAudio(file: File, key: string): Promise<string> {
+export async function uploadFile(file: File, key: string): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   await r2.send(
     new PutObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME!,
       Key: key,
       Body: buffer,
-      ContentType: file.type || 'audio/mpeg',
+      ContentType: file.type || 'application/octet-stream',
     })
   );
   return `${process.env.R2_PUBLIC_BASE_URL}/${key}`;

@@ -1,10 +1,46 @@
-import type { AppState } from './types';
+import type { AppState, LearningItem } from './types';
+
+function createMockLearningItem(
+  letter: string,
+  letterAudio: string,
+  word: string,
+  wordAudio: string,
+  arabicWord: string
+): LearningItem {
+  return {
+    cells: {
+      cell_1_1: {
+        row: 1,
+        column: 1,
+        language: 'english',
+        text: letter,
+        audioUrl: letterAudio,
+      },
+      cell_2_1: {
+        row: 2,
+        column: 1,
+        language: 'english',
+        text: word,
+        audioUrl: wordAudio,
+      },
+      cell_3_1: {
+        row: 3,
+        column: 1,
+        language: 'arabic',
+        text: arabicWord,
+        audioUrl: '',
+      },
+    },
+  };
+}
 
 export const initialState: AppState = {
   worlds: {
     world_001: {
       title: 'World 1: Alphabet Oasis',
       order: 1,
+      buttonImageUrl: '',
+      backgroundImageUrl: '',
       levels: {
         level_001: {
           title: 'Level 1: First Letters',
@@ -15,19 +51,16 @@ export const initialState: AppState = {
               order: 1,
               data: {
                 learningItems: {
-                  item_001: {
-                    englishLetter: 'A',
-                    englishWord: 'Apple',
-                    arabicWord: 'تُفَّاح',
-                    audioUrlLetter: '/mock/a.mp3',
-                    audioUrlWord: '/mock/apple.mp3',
-                  },
-                  item_002: {
-                    englishLetter: 'A',
-                    englishWord: 'Ant',
-                    arabicWord: 'نملة',
-                    audioUrlLetter: '/mock/a.mp3',
-                    audioUrlWord: '/mock/ant.mp3',
+                  name: 'عناصر التعلم',
+                  description: '',
+                  gridSize: { rows: 3, columns: 1 },
+                  items: {
+                    item_001: createMockLearningItem(
+                      'A', '/mock/a.mp3', 'Apple', '/mock/apple.mp3', 'تُفَّاح'
+                    ),
+                    item_002: createMockLearningItem(
+                      'A', '/mock/a.mp3', 'Ant', '/mock/ant.mp3', 'نملة'
+                    ),
                   },
                 },
                 quizzes: {
@@ -65,12 +98,13 @@ export const initialState: AppState = {
               order: 2,
               data: {
                 learningItems: {
-                  item_001: {
-                    englishLetter: 'B',
-                    englishWord: 'Ball',
-                    arabicWord: 'كُرَة',
-                    audioUrlLetter: '/mock/b.mp3',
-                    audioUrlWord: '/mock/ball.mp3',
+                  name: 'عناصر التعلم',
+                  description: '',
+                  gridSize: { rows: 3, columns: 1 },
+                  items: {
+                    item_001: createMockLearningItem(
+                      'B', '/mock/b.mp3', 'Ball', '/mock/ball.mp3', 'كُرَة'
+                    ),
                   },
                 },
                 quizzes: {
@@ -98,12 +132,13 @@ export const initialState: AppState = {
               order: 1,
               data: {
                 learningItems: {
-                  item_001: {
-                    englishLetter: 'C',
-                    englishWord: 'Cat',
-                    arabicWord: 'قِطّ',
-                    audioUrlLetter: '/mock/c.mp3',
-                    audioUrlWord: '/mock/cat.mp3',
+                  name: 'عناصر التعلم',
+                  description: '',
+                  gridSize: { rows: 3, columns: 1 },
+                  items: {
+                    item_001: createMockLearningItem(
+                      'C', '/mock/c.mp3', 'Cat', '/mock/cat.mp3', 'قِطّ'
+                    ),
                   },
                 },
                 quizzes: {
@@ -127,6 +162,8 @@ export const initialState: AppState = {
     world_002: {
       title: 'World 2: Number Safari',
       order: 2,
+      buttonImageUrl: '',
+      backgroundImageUrl: '',
       levels: {
         level_001: {
           title: 'Level 1: Counting 1-5',
@@ -137,19 +174,16 @@ export const initialState: AppState = {
               order: 1,
               data: {
                 learningItems: {
-                  item_001: {
-                    englishLetter: '1',
-                    englishWord: 'One',
-                    arabicWord: 'واحِد',
-                    audioUrlLetter: '/mock/1.mp3',
-                    audioUrlWord: '/mock/one.mp3',
-                  },
-                  item_002: {
-                    englishLetter: '2',
-                    englishWord: 'Two',
-                    arabicWord: 'اِثنان',
-                    audioUrlLetter: '/mock/2.mp3',
-                    audioUrlWord: '/mock/two.mp3',
+                  name: 'عناصر التعلم',
+                  description: '',
+                  gridSize: { rows: 3, columns: 1 },
+                  items: {
+                    item_001: createMockLearningItem(
+                      '1', '/mock/1.mp3', 'One', '/mock/one.mp3', 'واحِد'
+                    ),
+                    item_002: createMockLearningItem(
+                      '2', '/mock/2.mp3', 'Two', '/mock/two.mp3', 'اِثنان'
+                    ),
                   },
                 },
                 quizzes: {
