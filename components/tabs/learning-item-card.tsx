@@ -105,6 +105,6 @@ export function createEmptyLearningItem(rows: number, columns: number): Learning
   return { cells };
 }
 
-export function newLearningItemId(): string {
-  return generateId('item');
+export function newLearningItemId(existingIds: readonly string[] = []): string {
+  return generateId('item', existingIds);
 }

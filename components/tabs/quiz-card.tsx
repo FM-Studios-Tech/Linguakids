@@ -811,7 +811,7 @@ export function QuizCard({ quizId, index, total, quiz, onChange, onRemove, onMov
 
   function addOption() {
     if (!newOptionText.trim()) return;
-    const optId = generateId('opt');
+    const optId = generateId('option', Object.keys(quiz.options || {}));
     const newOptions = { ...(quiz.options || {}), [optId]: { text: newOptionText.trim() } };
     onChange(quizId, { options: newOptions });
     setNewOptionText('');
@@ -848,8 +848,8 @@ export function QuizCard({ quizId, index, total, quiz, onChange, onRemove, onMov
     } else {
       patch.correctAnswerText = undefined;
       if (!quiz.options || Object.keys(quiz.options).length === 0) {
-        const opt1 = generateId('opt');
-        const opt2 = generateId('opt');
+        const opt1 = generateId('option');
+        const opt2 = generateId('option', [opt1]);
         patch.options = {
           [opt1]: { text: '' },
           [opt2]: { text: '' },
@@ -1158,8 +1158,8 @@ export function createEmptyQuiz(type: QuizType = 'text_multiple_choice'): Quiz {
       arabicPromptText: '',
     };
   }
-  const opt1 = generateId('opt');
-  const opt2 = generateId('opt');
+  const opt1 = generateId('option');
+  const opt2 = generateId('option', [opt1]);
   return {
     type,
     questionText: type === 'text_multiple_choice' ? '' : undefined,
@@ -1172,6 +1172,6 @@ export function createEmptyQuiz(type: QuizType = 'text_multiple_choice'): Quiz {
   };
 }
 
-export function newQuizId(): string {
-  return generateId('quiz');
+export function newQuizId(existingIds: readonly string[] = []): string {
+  return generateId('quiz', existingIds);
 }

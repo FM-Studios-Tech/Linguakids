@@ -1050,7 +1050,7 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
 
   function addLearningItem() {
     if (!lessonData || !selectedWorldId || !selectedLevelId || !selectedLessonId) return;
-    const id = newLearningItemId();
+    const id = newLearningItemId(Object.keys(lessonData.learningItems.items));
     const { rows, columns } = lessonData.learningItems.gridSize;
     const item = createEmptyLearningItem(rows || 1, columns || 1);
     const newItems = {
@@ -1096,7 +1096,7 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
 
   function addQuizTyped(type: QuizType) {
     if (!lessonData || !selectedWorldId || !selectedLevelId || !selectedLessonId) return;
-    const id = newQuizId();
+    const id = newQuizId(Object.keys(lessonData.quizzes));
     const sameTypeCount = Object.values(lessonData.quizzes).filter(q => q.type === type).length;
     const quiz = { ...createEmptyQuiz(type), order: sameTypeCount };
     const newQuizzes = { ...lessonData.quizzes, [id]: quiz };

@@ -147,7 +147,7 @@
 // }
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, type ChangeEvent } from 'react';
 import {
   Globe,
   Layers,
@@ -157,6 +157,7 @@ import {
   Cloud,
   Languages,
   CheckCircle2,
+  Upload,
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -168,11 +169,14 @@ import { LessonsTab } from '@/components/tabs/lessons-tab';
 import { LessonEditorTab } from '@/components/tabs/lesson-editor-tab';
 import { ref, set, onValue } from 'firebase/database';
 import { db } from '@/lib/firebase';
+import { importTextWorkbook } from '@/lib/excel-import';
  import Image from "next/image";
 export default function Home() {
   const app = useAppState();
   const [saved, setSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isImporting, setIsImporting] = useState(false);
+  const excelInputRef = useRef<HTMLInputElement>(null);
 
   // 1. Fetch live data from Firebase on page load
   useEffect(() => {
@@ -244,6 +248,43 @@ export default function Home() {
       alert('Save failed — check the console for details.');
     }
   }
+
+  async function handleExcelImport(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+
+    if (!file) return;
+
+    const confirmed = window.confirm(
+      'Import this workbook? Matching IDs will update text, new IDs will be added, and existing image/audio URLs will be preserved. Review the result, then click Save to Firebase.'
+    );
+    if (!confirmed) return;
+
+    setIsImporting(true);
+    try {
+      const buffer = await file.arrayBuffer();
+      const result = await importTextWorkbook(buffer, app.state);
+
+      app.dispatch({ type: 'REPLACE_STATE', payload: result.state });
+      setSaved(false);
+
+      alert(
+        `Excel import completed locally.\n\n` +
+          `${result.worlds} worlds\n` +
+          `${result.levels} levels\n` +
+          `${result.lessons} lessons\n` +
+          `${result.learningCells} learning cells\n` +
+          `${result.quizzes} quizzes\n` +
+          `${result.quizOptions} quiz options\n\n` +
+          `Review the data, then click Save to Firebase.`
+      );
+    } catch (error) {
+      console.error('Excel import failed:', error);
+      alert(error instanceof Error ? `Import failed: ${error.message}` : 'Import failed.');
+    } finally {
+      setIsImporting(false);
+    }
+  }
   // 2. Show a loading screen while fetching from Firebase
   if (isLoading) {
     return (
@@ -297,6 +338,23 @@ export default function Home() {
                   {lessonCount} lessons
                 </span>
               </div>
+              <input
+                ref={excelInputRef}
+                type="file"
+                accept=".xlsx,.xls"
+                className="hidden"
+                onChange={handleExcelImport}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-2"
+                disabled={isImporting}
+                onClick={() => excelInputRef.current?.click()}
+              >
+                <Upload className="h-4 w-4" />
+                {isImporting ? 'Importing...' : 'Import Excel'}
+              </Button>
               <Button onClick={handleSave} className="gap-2">
                 {saved ? (
                   <>

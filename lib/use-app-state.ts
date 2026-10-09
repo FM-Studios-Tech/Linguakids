@@ -338,10 +338,24 @@ type Action =
       data: LessonData;
     };
 
-export function generateId(prefix: string): string {
-  return `${prefix}_${Date.now().toString(36)}${Math.random()
-    .toString(36)
-    .slice(2, 6)}`;
+export function generateId(
+  prefix: string,
+  existingIds: readonly string[] = []
+): string {
+  const canonicalPrefix = prefix === 'opt' ? 'option' : prefix;
+  const acceptedPrefixes = canonicalPrefix === 'option'
+    ? ['option', 'opt']
+    : [canonicalPrefix];
+  const pattern = new RegExp(`^(?:${acceptedPrefixes.join('|')})_(\\d+)$`);
+
+  let highestNumber = 0;
+  for (const id of existingIds) {
+    const match = pattern.exec(id);
+    if (!match) continue;
+    highestNumber = Math.max(highestNumber, Number(match[1]) || 0);
+  }
+
+  return `${canonicalPrefix}_${String(highestNumber + 1).padStart(3, '0')}`;
 }
 
 function reducer(state: AppState, action: Action): AppState {
@@ -492,7 +506,7 @@ function reducer(state: AppState, action: Action): AppState {
       };
     }
     case 'ADD_WORLD': {
-      const id = generateId('world');
+      const id = generateId('world', Object.keys(state.worlds || {}));
       return {
         ...state,
         worlds: { ...(state.worlds || {}), [id]: action.world },
@@ -516,7 +530,7 @@ function reducer(state: AppState, action: Action): AppState {
     case 'ADD_LEVEL': {
       const world = state.worlds[action.worldId];
       if (!world) return state;
-      const id = generateId('level');
+      const id = generateId('level', Object.keys(world.levels || {}));
       return {
         ...state,
         worlds: {
@@ -564,7 +578,7 @@ function reducer(state: AppState, action: Action): AppState {
       if (!world) return state;
       const level = world.levels[action.levelId];
       if (!level) return state;
-      const id = generateId('lesson');
+      const id = generateId('lesson', Object.keys(level.lessons || {}));
       return {
         ...state,
         worlds: {

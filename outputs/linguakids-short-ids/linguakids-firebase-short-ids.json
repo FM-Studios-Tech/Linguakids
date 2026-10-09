@@ -1,0 +1,2099 @@
+{
+  "appState": {
+    "worlds": {
+      "world_001": {
+        "levels": {
+          "level_001": {
+            "lessons": {
+              "lesson_001": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "A",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786941759391-LetterSound_A.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Add",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786979738337-add.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يُضِيف",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "B",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786941784114-LetterSound_B.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Build",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786941787805-build.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يبني",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "C",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786941810856-LetterSound_C.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Collect",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786941807291-collect.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يجمع",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Add"
+                        },
+                        "option_002": {
+                          "text": "Build"
+                        },
+                        "option_003": {
+                          "text": "Collect"
+                        }
+                      },
+                      "order": 0,
+                      "questionText": " يُضِيف",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Collect"
+                        },
+                        "option_002": {
+                          "text": "Add"
+                        },
+                        "option_003": {
+                          "text": "Build"
+                        }
+                      },
+                      "order": 1,
+                      "questionText": "يبني",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Build"
+                        },
+                        "option_002": {
+                          "text": "Collect"
+                        },
+                        "option_003": {
+                          "text": "Add"
+                        }
+                      },
+                      "order": 1,
+                      "questionText": "يجمع",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Collect"
+                        },
+                        "option_002": {
+                          "text": "Add"
+                        },
+                        "option_003": {
+                          "text": "Build"
+                        }
+                      },
+                      "order": 0,
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786969809539-add.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctAnswerText": "Add",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786969860145-add.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Add"
+                        },
+                        "option_002": {
+                          "text": "Build"
+                        },
+                        "option_003": {
+                          "text": "Collect"
+                        }
+                      },
+                      "order": 1,
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786982916922-build.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Add"
+                        },
+                        "option_002": {
+                          "text": "Build"
+                        },
+                        "option_003": {
+                          "text": "Collect"
+                        }
+                      },
+                      "order": 1,
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786982953270-collect.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Build",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786983040409-build.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Collect",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786983055370-collect.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Add",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Build",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Collect",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 1,
+                "title": "1"
+              },
+              "lesson_002": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "D",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995116228-LetterSound_D.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Discuss",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995120656-discuss.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يناقش",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "E",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995131357-LetterSound_E.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Enter",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995128015-enter.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يدخل",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "F",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995157030-LetterSound_F.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Follow",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995153774-follow.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يتبع",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Enter"
+                        },
+                        "option_002": {
+                          "text": "Discuss"
+                        },
+                        "option_003": {
+                          "text": "Follow"
+                        }
+                      },
+                      "questionText": "يناقش",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Follow"
+                        },
+                        "option_002": {
+                          "text": "Enter"
+                        },
+                        "option_003": {
+                          "text": "Discuss"
+                        }
+                      },
+                      "questionText": "يدخل",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Discuss"
+                        },
+                        "option_002": {
+                          "text": "Enter"
+                        },
+                        "option_003": {
+                          "text": "Follow"
+                        }
+                      },
+                      "questionText": "يتبع",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Follow"
+                        },
+                        "option_002": {
+                          "text": "Enter"
+                        },
+                        "option_003": {
+                          "text": "Discuss"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995305064-discuss.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Enter"
+                        },
+                        "option_002": {
+                          "text": "Discuss"
+                        },
+                        "option_003": {
+                          "text": "Follow"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995362524-enter.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Enter"
+                        },
+                        "option_002": {
+                          "text": "Follow"
+                        },
+                        "option_003": {
+                          "text": "Discuss"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995422560-follow.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctAnswerText": "Discuss",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995501209-discuss.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Enter",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995513134-enter.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Follow",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995523923-follow.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Discuss",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Enter",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Follow",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 2,
+                "title": "2"
+              },
+              "lesson_003": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "G",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995629863-LetterSound_G.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Grow",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995626903-grow.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "ينمو",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "H",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995646199-LetterSound_H.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Happen",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995643439-happen.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يحدث",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "I",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995677694-LetterSound_I.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Invent",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995675565-invent.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يخترع",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Happen"
+                        },
+                        "option_002": {
+                          "text": "Grow"
+                        },
+                        "option_003": {
+                          "text": "Invent"
+                        }
+                      },
+                      "questionText": "ينمو",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Happen"
+                        },
+                        "option_002": {
+                          "text": "Invent"
+                        },
+                        "option_003": {
+                          "text": "Grow"
+                        }
+                      },
+                      "questionText": "يحدث",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Happen"
+                        },
+                        "option_002": {
+                          "text": "Grow"
+                        },
+                        "option_003": {
+                          "text": "Invent"
+                        }
+                      },
+                      "questionText": "يخترع",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Happen"
+                        },
+                        "option_002": {
+                          "text": "Grow"
+                        },
+                        "option_003": {
+                          "text": "Invent"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995821425-grow.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Grow"
+                        },
+                        "option_002": {
+                          "text": "Invent"
+                        },
+                        "option_003": {
+                          "text": "Happen"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995877104-happen.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Happen"
+                        },
+                        "option_002": {
+                          "text": "Invent"
+                        },
+                        "option_003": {
+                          "text": "Grow"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995880224-invent.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctAnswerText": "Grow",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995891592-grow.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Happen",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995901468-happen.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Invent",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786995910953-invent.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Grow",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Happen",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Invent",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 3,
+                "title": "3"
+              },
+              "lesson_004": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "J",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996286498-LetterSound_J.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Jump",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996282561-jump.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يقفز",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "K",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996307994-LetterSound_K.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Keep",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996305858-keep.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يحتفظ ",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "L",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996331050-LetterSound_L.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Leave",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996328269-leave.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يغادر",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Jump"
+                        },
+                        "option_002": {
+                          "text": "Keep"
+                        },
+                        "option_003": {
+                          "text": "Leave"
+                        }
+                      },
+                      "questionText": "يقفز",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Jump"
+                        },
+                        "option_002": {
+                          "text": "Keep"
+                        },
+                        "option_003": {
+                          "text": "Leave"
+                        }
+                      },
+                      "questionText": "يحتفظ ",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Jump"
+                        },
+                        "option_002": {
+                          "text": "Keep"
+                        },
+                        "option_003": {
+                          "text": "Leave"
+                        }
+                      },
+                      "questionText": "يغادر",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Keep"
+                        },
+                        "option_002": {
+                          "text": "Leave"
+                        },
+                        "option_003": {
+                          "text": "Jump"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996480568-jump.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Keep"
+                        },
+                        "option_002": {
+                          "text": "Leave"
+                        },
+                        "option_003": {
+                          "text": "Jump"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996473877-keep.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Keep"
+                        },
+                        "option_002": {
+                          "text": "Leave"
+                        },
+                        "option_003": {
+                          "text": "Jump"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996470202-leave.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctAnswerText": "Jump",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996507535-jump.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Keep",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996516125-keep.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Leave",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996518746-leave.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Jump",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Keep",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Leave",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 4,
+                "title": "4"
+              },
+              "lesson_005": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "M",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996640483-LetterSound_M.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Meet",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996638073-meet.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يقابل",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "N",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996655099-LetterSound_N.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Need",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996653511-need.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يحتاج",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "O",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996672821-LetterSound_O.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Offer",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996671133-offer.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يُقدِّم",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Need"
+                        },
+                        "option_002": {
+                          "text": "Offer"
+                        },
+                        "option_003": {
+                          "text": "Meet"
+                        }
+                      },
+                      "questionText": "يقابل",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Meet"
+                        },
+                        "option_002": {
+                          "text": "Need"
+                        },
+                        "option_003": {
+                          "text": "Offer"
+                        }
+                      },
+                      "questionText": "يحتاج",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Meet"
+                        },
+                        "option_002": {
+                          "text": "Offer"
+                        },
+                        "option_003": {
+                          "text": "Need"
+                        }
+                      },
+                      "questionText": "يُقدِّم",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Need"
+                        },
+                        "option_002": {
+                          "text": "Meet"
+                        },
+                        "option_003": {
+                          "text": "Offer"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996855061-meet.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Meet"
+                        },
+                        "option_002": {
+                          "text": "Need"
+                        },
+                        "option_003": {
+                          "text": "Offer"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996862206-need.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Need"
+                        },
+                        "option_002": {
+                          "text": "Offer"
+                        },
+                        "option_003": {
+                          "text": "Meet"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996869199-offer.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctAnswerText": "Meet",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996881258-meet.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Need",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996892783-need.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Offer",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996901695-offer.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Meet",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Need",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Offer",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 5,
+                "title": "5"
+              },
+              "lesson_006": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "P",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996972498-LetterSound_P.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Prefer",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996969680-prefer.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يفضِّل",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Q",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996982085-LetterSound_Q.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Quit",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996979103-quit.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يترك",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "R",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996991447-LetterSound_R.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Ride",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786996988658-ride.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يركب",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Prefer"
+                        },
+                        "option_002": {
+                          "text": "Quit"
+                        },
+                        "option_003": {
+                          "text": "Ride"
+                        }
+                      },
+                      "questionText": "يفضِّل",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Prefer"
+                        },
+                        "option_002": {
+                          "text": "Quit"
+                        },
+                        "option_003": {
+                          "text": "Ride"
+                        }
+                      },
+                      "questionText": "يترك",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Quit"
+                        },
+                        "option_002": {
+                          "text": "Prefer"
+                        },
+                        "option_003": {
+                          "text": "Ride"
+                        }
+                      },
+                      "questionText": "يركب",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Ride"
+                        },
+                        "option_002": {
+                          "text": "Quit"
+                        },
+                        "option_003": {
+                          "text": "Prefer"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997066819-prefer.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Quit"
+                        },
+                        "option_002": {
+                          "text": "Ride"
+                        },
+                        "option_003": {
+                          "text": "Prefer"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997074466-quit.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Ride"
+                        },
+                        "option_002": {
+                          "text": "Quit"
+                        },
+                        "option_003": {
+                          "text": "Prefer"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997079122-ride.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctAnswerText": "Prefer",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997123378-prefer.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Quit",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997133514-quit.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Ride",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997152680-ride.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Prefer",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Quit",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Ride",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 6,
+                "title": "6"
+              },
+              "lesson_007": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "S",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997315346-LetterSound_S.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Send",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997318374-send.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يُرسِل",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "T",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997330194-travel.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Travel",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997325517-LetterSound_T.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يُسافِر",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "U",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997339154-LetterSound_U.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Understand",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786997336721-understand.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يفهم",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Travel"
+                        },
+                        "option_002": {
+                          "text": "Send"
+                        },
+                        "option_003": {
+                          "text": "Understand"
+                        }
+                      },
+                      "questionText": "يُرسِل",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Travel"
+                        },
+                        "option_002": {
+                          "text": "Send"
+                        },
+                        "option_003": {
+                          "text": "Understand"
+                        }
+                      },
+                      "questionText": "يُسافِر",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Travel"
+                        },
+                        "option_002": {
+                          "text": "Send"
+                        },
+                        "option_003": {
+                          "text": "Understand"
+                        }
+                      },
+                      "questionText": "يفهم",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Understand"
+                        },
+                        "option_002": {
+                          "text": "Send"
+                        },
+                        "option_003": {
+                          "text": "Travel"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998208060-send.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Send"
+                        },
+                        "option_002": {
+                          "text": "Understand"
+                        },
+                        "option_003": {
+                          "text": "Travel"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998214617-travel.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Understand"
+                        },
+                        "option_002": {
+                          "text": "Travel"
+                        },
+                        "option_003": {
+                          "text": "Send"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998220194-understand.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctAnswerText": "Send",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998231918-send.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Travel",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998244193-travel.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Understand",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998256347-understand.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Send",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Travel",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Understand",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 7,
+                "title": "7"
+              },
+              "lesson_008": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "V",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998311754-LetterSound_V.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Visit",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998307829-visit.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يزور",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "W",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998337572-LetterSound_W.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Wash",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998334238-wash.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يغسل",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "X",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998363064-LetterSound_X.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Explore",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998358892-explore.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يستكشف",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Explore"
+                        },
+                        "option_002": {
+                          "text": "Wash"
+                        },
+                        "option_003": {
+                          "text": "Visit"
+                        }
+                      },
+                      "questionText": "يزور",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Explore"
+                        },
+                        "option_002": {
+                          "text": "Wash"
+                        },
+                        "option_003": {
+                          "text": "Visit"
+                        }
+                      },
+                      "questionText": "يغسل",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Wash"
+                        },
+                        "option_002": {
+                          "text": "Explore"
+                        },
+                        "option_003": {
+                          "text": "Visit"
+                        }
+                      },
+                      "questionText": "يستكشف",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_003",
+                      "options": {
+                        "option_001": {
+                          "text": "Explore"
+                        },
+                        "option_002": {
+                          "text": "Wash"
+                        },
+                        "option_003": {
+                          "text": "Visit"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998513523-visit.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Wash"
+                        },
+                        "option_002": {
+                          "text": "Explore"
+                        },
+                        "option_003": {
+                          "text": "Visit"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998522523-wash.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_006": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Wash"
+                        },
+                        "option_002": {
+                          "text": "Explore"
+                        },
+                        "option_003": {
+                          "text": "Visit"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998532698-explore.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_007": {
+                      "correctAnswerText": "Visit",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998544101-visit.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_008": {
+                      "correctAnswerText": "Wash",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998549893-wash.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_009": {
+                      "correctAnswerText": "Explore",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998564041-explore.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_010": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Visit",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Wash",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Explore",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    }
+                  }
+                },
+                "order": 8,
+                "title": "8"
+              },
+              "lesson_009": {
+                "data": {
+                  "learningItems": {
+                    "gridSize": {
+                      "rows": 3,
+                      "columns": 1
+                    },
+                    "items": {
+                      "item_001": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Y",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998645158-LetterSound_Y.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Yell",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998641945-yell.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يصرخ",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_002": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Z",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998667312-LetterSound_Z.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Zoom in",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998663284-zoom in.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يُكبِّر",
+                            "audioUrl": ""
+                          }
+                        }
+                      },
+                      "item_003": {
+                        "cells": {
+                          "cell_1_1": {
+                            "row": 1,
+                            "column": 1,
+                            "language": "english",
+                            "text": "A",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1787672388248-LetterSound_A.mp3"
+                          },
+                          "cell_2_1": {
+                            "row": 2,
+                            "column": 1,
+                            "language": "english",
+                            "text": "Ask",
+                            "audioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1787672393718-ask.mp3"
+                          },
+                          "cell_3_1": {
+                            "row": 3,
+                            "column": 1,
+                            "language": "arabic",
+                            "text": "يسأل",
+                            "audioUrl": ""
+                          }
+                        }
+                      }
+                    },
+                    "name": "عناصر التعلم",
+                    "description": ""
+                  },
+                  "quizzes": {
+                    "quiz_001": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Zoom in"
+                        },
+                        "option_002": {
+                          "text": "Yell"
+                        },
+                        "option_003": {
+                          "text": "Ask"
+                        }
+                      },
+                      "questionText": "يصرخ",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_002": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Yell"
+                        },
+                        "option_002": {
+                          "text": "Zoom in"
+                        },
+                        "option_003": {
+                          "text": "Ask"
+                        }
+                      },
+                      "questionText": "يُكبِّر",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_003": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Zoom in"
+                        },
+                        "option_002": {
+                          "text": "Yell"
+                        },
+                        "option_003": {
+                          "text": "Ask"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998720495-yell.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_004": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Zoom in"
+                        },
+                        "option_002": {
+                          "text": "Yell"
+                        },
+                        "option_003": {
+                          "text": "Ask"
+                        }
+                      },
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998725128-zoom in.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_005": {
+                      "correctAnswerText": "Yell",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998806508-yell.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_006": {
+                      "correctAnswerText": "Zoom in",
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1786998795139-zoom in.mp3",
+                      "type": "audio_typing"
+                    },
+                    "quiz_007": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Yell",
+                      "order": 0,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_008": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Zoom in",
+                      "order": 1,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_009": {
+                      "correctOptionId": "option_001",
+                      "options": {
+                        "option_001": {
+                          "text": "Ask"
+                        },
+                        "option_002": {
+                          "text": "Zoom In"
+                        },
+                        "option_003": {
+                          "text": "Yell"
+                        }
+                      },
+                      "order": 2,
+                      "questionText": "يسأل",
+                      "type": "text_multiple_choice"
+                    },
+                    "quiz_010": {
+                      "correctOptionId": "option_002",
+                      "options": {
+                        "option_001": {
+                          "text": "Yell"
+                        },
+                        "option_002": {
+                          "text": "Zoom in"
+                        },
+                        "option_003": {
+                          "text": "Ask"
+                        }
+                      },
+                      "order": 2,
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1787672511647-ask.mp3",
+                      "type": "audio_multiple_choice"
+                    },
+                    "quiz_011": {
+                      "arabicPromptText": "",
+                      "englishPromptText": "Ask",
+                      "order": 2,
+                      "type": "arabic_voice_record"
+                    },
+                    "quiz_012": {
+                      "correctAnswerText": "Ask",
+                      "order": 2,
+                      "questionAudioUrl": "https://pub-8df8ce8dd4b7406bb1dc417600fb2eb0.r2.dev/audio/1787672547258-ask.mp3",
+                      "type": "audio_typing"
+                    }
+                  }
+                },
+                "order": 9,
+                "title": "9"
+              }
+            },
+            "order": 1,
+            "title": "1"
+          },
+          "level_002": {
+            "order": 2,
+            "title": "2",
+            "lessons": {}
+          },
+          "level_003": {
+            "order": 3,
+            "title": "3",
+            "lessons": {}
+          },
+          "level_004": {
+            "order": 4,
+            "title": "4",
+            "lessons": {}
+          },
+          "level_005": {
+            "order": 5,
+            "title": "5",
+            "lessons": {}
+          },
+          "level_006": {
+            "order": 6,
+            "title": "6",
+            "lessons": {}
+          },
+          "level_007": {
+            "order": 7,
+            "title": "7",
+            "lessons": {}
+          },
+          "level_008": {
+            "order": 8,
+            "title": "8",
+            "lessons": {}
+          },
+          "level_009": {
+            "order": 9,
+            "title": "9",
+            "lessons": {}
+          },
+          "level_010": {
+            "order": 10,
+            "title": "10",
+            "lessons": {}
+          }
+        },
+        "order": 1,
+        "title": "The Desert Kingdon"
+      },
+      "world_002": {
+        "order": 2,
+        "title": "Volcanic Canyon",
+        "levels": {}
+      },
+      "world_003": {
+        "order": 3,
+        "title": "The Frozen Tundra",
+        "levels": {}
+      },
+      "world_004": {
+        "order": 4,
+        "title": "Palace of Stars",
+        "levels": {}
+      }
+    }
+  },
+  "contentFields": {
+    "field_001": {
+      "createdAt": 1789469534900,
+      "id": "field_001",
+      "kind": "text",
+      "label": "Text"
+    },
+    "field_002": {
+      "createdAt": 1789469534900,
+      "id": "field_002",
+      "kind": "audio",
+      "label": "Audio"
+    }
+  }
+}

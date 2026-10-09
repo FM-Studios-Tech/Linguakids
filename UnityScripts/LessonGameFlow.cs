@@ -24,11 +24,16 @@ public class LessonGameFlow : MonoBehaviour
     [SerializeField] private GameObject speechComparePanel;
 
     [Header("1. Learning Phase UI")]
+    [InspectorName("Learning Item Name Text")]
+    [Tooltip("Drag the TextMeshProUGUI that should display learningItems.name from Firebase here.")]
     [SerializeField] private TextMeshProUGUI learningNameText;
     [SerializeField] private TextMeshProUGUI learningDescriptionText;
     [SerializeField] private RectTransform learningGridContent;
     [SerializeField] private GridLayoutGroup learningGridLayout;
+    [Tooltip("Prefab used for English learning cells")]
     [SerializeField] private GameObject learningCellPrefab;
+    [Tooltip("Prefab used when the Firebase cell language is arabic")]
+    [SerializeField] private GameObject arabicLearningCellPrefab;
     [Tooltip("Name of the TextMeshPro child inside the learning-cell prefab")]
     [SerializeField] private string cellTextObjectName = "LetterText";
     [Tooltip("Name of the audio Button child inside the learning-cell prefab")]
@@ -43,6 +48,13 @@ public class LessonGameFlow : MonoBehaviour
     [Tooltip("Firebase Realtime Database appState REST endpoint")]
     [SerializeField] private string firebaseAppStateUrl =
         "https://linguakids-admin-default-rtdb.firebaseio.com/appState.json";
+
+    [Header("Short ID Migration")]
+    [Tooltip("Copies lesson progress saved with the old Firebase IDs to the new short IDs once.")]
+    [SerializeField] private bool migrateLegacyProgressToShortIds = true;
+    [Tooltip("Number of lessons that must be unlocked to consider a level skipped/completed.")]
+    [Min(1)]
+    [SerializeField] private int lessonsPerLevel = 9;
 
     [Header("2. Text Multiple Choice UI")]
     [SerializeField] private TextMeshProUGUI tmcQuestionText;
@@ -143,6 +155,34 @@ public class LessonGameFlow : MonoBehaviour
     // Runtime world-button sprites created from downloaded Cloudflare images.
     private readonly List<Sprite> _downloadedWorldButtonSprites = new List<Sprite>();
 
+    private const string LessonProgressKeyPrefix = "HighestUnlockedLesson";
+    private const string ShortIdMigrationKey = "ShortIdProgressMigrationV1";
+
+    // These aliases match linguakids-firebase-short-ids.json.
+    private static readonly Dictionary<string, string> LegacyWorldIds =
+        new Dictionary<string, string>
+        {
+            { "world_mswqmvimn57c", "world_001" },
+            { "world_msyvm9l29pvf", "world_002" },
+            { "world_msyvmvohu9wq", "world_003" },
+            { "world_msyvn7l4sfbb", "world_004" }
+        };
+
+    private static readonly Dictionary<string, string> LegacyLevelIds =
+        new Dictionary<string, string>
+        {
+            { "level_mswqn3de403w", "level_001" },
+            { "level_msxlc309j835", "level_002" },
+            { "level_msxlc4xlm0hu", "level_003" },
+            { "level_msxlc6fkdh39", "level_004" },
+            { "level_msxlc8hvi7bm", "level_005" },
+            { "level_msxlccolqgqr", "level_006" },
+            { "level_msxlcej3ufp8", "level_007" },
+            { "level_msxq19dkm58e", "level_008" },
+            { "level_msxq1cho7hm8", "level_009" },
+            { "level_msxq1f16gokf", "level_010" }
+        };
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -151,6 +191,9 @@ public class LessonGameFlow : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        if (migrateLegacyProgressToShortIds)
+            MigrateLegacyLessonProgress();
 
         LoadAudioSettings();
         ApplyDefaultWorldButtonSprites();
@@ -419,13 +462,69 @@ public class LessonGameFlow : MonoBehaviour
 
     // ================= SETUP =================
 
+    private static string NormalizeWorldId(string worldId)
+    {
+        if (string.IsNullOrWhiteSpace(worldId))
+            return string.Empty;
+
+        return LegacyWorldIds.TryGetValue(worldId, out string shortId)
+            ? shortId
+            : worldId;
+    }
+
+    private static string NormalizeLevelId(string levelId)
+    {
+        if (string.IsNullOrWhiteSpace(levelId))
+            return string.Empty;
+
+        return LegacyLevelIds.TryGetValue(levelId, out string shortId)
+            ? shortId
+            : levelId;
+    }
+
+    private static string GetLessonProgressKey(string worldId, string levelId)
+    {
+        return $"{LessonProgressKeyPrefix}_{worldId}_{levelId}";
+    }
+
+    private void MigrateLegacyLessonProgress()
+    {
+        if (PlayerPrefs.GetInt(ShortIdMigrationKey, 0) == 1)
+            return;
+
+        int migratedKeyCount = 0;
+        const string oldWorldId = "world_mswqmvimn57c";
+        const string newWorldId = "world_001";
+
+        foreach (KeyValuePair<string, string> levelIds in LegacyLevelIds)
+        {
+            string oldKey = GetLessonProgressKey(oldWorldId, levelIds.Key);
+            if (!PlayerPrefs.HasKey(oldKey))
+                continue;
+
+            string newKey = GetLessonProgressKey(newWorldId, levelIds.Value);
+            int oldProgress = PlayerPrefs.GetInt(oldKey, 0);
+            int newProgress = PlayerPrefs.GetInt(newKey, 0);
+
+            PlayerPrefs.SetInt(newKey, Mathf.Max(oldProgress, newProgress));
+            migratedKeyCount++;
+        }
+
+        PlayerPrefs.SetInt(ShortIdMigrationKey, 1);
+        PlayerPrefs.Save();
+
+        Debug.Log(
+            $"Short-ID progress migration complete. Copied {migratedKeyCount} lesson progress key(s)."
+        );
+    }
+
     public void StartLesson(LessonData lessonData, string worldId, string levelId, int lessonIndex)
     {
         StopBackgroundMusic();
 
         _currentLesson = lessonData;
-        _currentWorldId = worldId;
-        _currentLevelId = levelId;
+        _currentWorldId = NormalizeWorldId(worldId);
+        _currentLevelId = NormalizeLevelId(levelId);
         _currentLessonIndex = lessonIndex;
 
         _learningIndex = 0;
@@ -579,7 +678,25 @@ public class LessonGameFlow : MonoBehaviour
             if (hasAudio)
                 _requiredAudioCells.Add(cellId);
 
-            GameObject cellObject = Instantiate(learningCellPrefab, learningGridContent);
+            bool isArabic = string.Equals(
+                cell.Language,
+                "arabic",
+                System.StringComparison.OrdinalIgnoreCase
+            );
+
+            GameObject selectedPrefab = isArabic && arabicLearningCellPrefab != null
+                ? arabicLearningCellPrefab
+                : learningCellPrefab;
+
+            if (selectedPrefab == null)
+            {
+                Debug.LogError(
+                    $"No learning cell prefab is assigned for language '{cell.Language}'."
+                );
+                continue;
+            }
+
+            GameObject cellObject = Instantiate(selectedPrefab, learningGridContent);
             _spawnedLearningCells.Add(cellObject);
             ConfigureLearningCell(cellObject, cellId, cell);
         }
@@ -631,11 +748,13 @@ public class LessonGameFlow : MonoBehaviour
         if (cellText != null)
         {
             cellText.text = cell.Text ?? string.Empty;
-            cellText.isRightToLeftText = string.Equals(
+            bool isArabic = string.Equals(
                 cell.Language,
                 "arabic",
                 System.StringComparison.OrdinalIgnoreCase
             );
+
+            cellText.isRightToLeftText = isArabic;
             cellText.alignment = TextAlignmentOptions.Center;
         }
         else
@@ -1138,7 +1257,7 @@ public class LessonGameFlow : MonoBehaviour
     {
         Debug.Log("Lesson completely finished! Checking for unlock...");
 
-        string saveKey = $"HighestUnlockedLesson_{_currentWorldId}_{_currentLevelId}";
+        string saveKey = GetLessonProgressKey(_currentWorldId, _currentLevelId);
         int highestUnlocked = PlayerPrefs.GetInt(saveKey, 0);
 
         if (_currentLessonIndex == highestUnlocked)
@@ -1213,7 +1332,119 @@ public class LessonGameFlow : MonoBehaviour
         PlayBackgroundMusic();
     }
 
-    // ================= QUIT & SHARE & RESTART =================
+    // ================= SKIP, QUIT, SHARE & RESTART =================
+
+    /// <summary>
+    /// Unlocks the lesson after the currently open lesson without awarding coins.
+    /// Assign this method directly to a Unity Button On Click event.
+    /// </summary>
+    public void SkipLesson()
+    {
+        if (!CanSkipCurrentLesson())
+            return;
+
+        string saveKey = GetLessonProgressKey(_currentWorldId, _currentLevelId);
+        int highestUnlocked = PlayerPrefs.GetInt(saveKey, 0);
+        int nextLessonIndex = _currentLessonIndex + 1;
+
+        PlayerPrefs.SetInt(saveKey, Mathf.Max(highestUnlocked, nextLessonIndex));
+        PlayerPrefs.Save();
+
+        Debug.Log(
+            $"Skipped lesson {_currentLessonIndex + 1}. " +
+            $"Highest unlocked lesson index is now {PlayerPrefs.GetInt(saveKey, 0)}."
+        );
+
+        ReturnToLessonSelectionAfterSkip();
+    }
+
+    /// <summary>
+    /// Unlocks every lesson in the currently open level without awarding coins.
+    /// Assign this method directly to a Unity Button On Click event.
+    /// </summary>
+    public void SkipLevel()
+    {
+        if (!CanSkipCurrentLesson())
+            return;
+
+        string saveKey = GetLessonProgressKey(_currentWorldId, _currentLevelId);
+        int highestUnlocked = PlayerPrefs.GetInt(saveKey, 0);
+        int completedLevelProgress = Mathf.Max(1, lessonsPerLevel);
+
+        PlayerPrefs.SetInt(
+            saveKey,
+            Mathf.Max(highestUnlocked, completedLevelProgress)
+        );
+        PlayerPrefs.Save();
+
+        Debug.Log(
+            $"Skipped level '{_currentLevelId}'. " +
+            $"All {completedLevelProgress} lesson slots are now unlocked."
+        );
+
+        ReturnToLessonSelectionAfterSkip();
+    }
+
+    private bool CanSkipCurrentLesson()
+    {
+        if (_currentLesson != null &&
+            !string.IsNullOrWhiteSpace(_currentWorldId) &&
+            !string.IsNullOrWhiteSpace(_currentLevelId))
+        {
+            return true;
+        }
+
+        Debug.LogWarning("Cannot skip because no lesson is currently open.");
+        return false;
+    }
+
+    private void ReturnToLessonSelectionAfterSkip()
+    {
+        // Prevent delayed answer/completion coroutines from reopening another panel.
+        StopAllCoroutines();
+
+        if (isRecording && !string.IsNullOrEmpty(micName))
+        {
+            Microphone.End(micName);
+            isRecording = false;
+        }
+
+        if (lessonAudioSource != null && lessonAudioSource.isPlaying)
+            lessonAudioSource.Stop();
+
+        ClearLearningGrid();
+
+        if (learningPanel != null) learningPanel.SetActive(false);
+        if (textMultipleChoicePanel != null) textMultipleChoicePanel.SetActive(false);
+        if (audioMultipleChoicePanel != null) audioMultipleChoicePanel.SetActive(false);
+        if (audioTypingPanel != null) audioTypingPanel.SetActive(false);
+        if (speechComparePanel != null) speechComparePanel.SetActive(false);
+        if (coinsAnimation != null) coinsAnimation.SetActive(false);
+
+        if (celebrationStars != null)
+        {
+            foreach (GameObject star in celebrationStars)
+            {
+                if (star != null) star.SetActive(false);
+            }
+        }
+
+        if (UIController.Instance != null)
+            UIController.Instance.UpdateCounters();
+
+        if (lessonSelectionMenu != null)
+            lessonSelectionMenu.SetActive(true);
+
+        if (LessonSelectionUI.Instance != null)
+        {
+            LessonSelectionUI.Instance.OpenLessonsForLevel(
+                _currentWorldId,
+                _currentLevelId
+            );
+        }
+
+        PlayBackgroundMusic();
+    }
 
     public void Share()
     {
