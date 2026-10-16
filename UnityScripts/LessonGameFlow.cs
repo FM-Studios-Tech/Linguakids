@@ -1279,6 +1279,14 @@ public class LessonGameFlow : MonoBehaviour
 
         PlayerPrefs.Save();
 
+        if (LevelScreenManager.Instance != null)
+        {
+            LevelScreenManager.Instance.TryUnlockNextLevel(
+                _currentWorldId,
+                _currentLevelId
+            );
+        }
+
         // Update local arrays and master UI controller
         UpdateCoinsUI();
         if (UIController.Instance != null) UIController.Instance.UpdateCoins();
@@ -1350,6 +1358,14 @@ public class LessonGameFlow : MonoBehaviour
         PlayerPrefs.SetInt(saveKey, Mathf.Max(highestUnlocked, nextLessonIndex));
         PlayerPrefs.Save();
 
+        if (LevelScreenManager.Instance != null)
+        {
+            LevelScreenManager.Instance.TryUnlockNextLevel(
+                _currentWorldId,
+                _currentLevelId
+            );
+        }
+
         Debug.Log(
             $"Skipped lesson {_currentLessonIndex + 1}. " +
             $"Highest unlocked lesson index is now {PlayerPrefs.GetInt(saveKey, 0)}."
@@ -1376,6 +1392,14 @@ public class LessonGameFlow : MonoBehaviour
             Mathf.Max(highestUnlocked, completedLevelProgress)
         );
         PlayerPrefs.Save();
+
+        if (LevelScreenManager.Instance != null)
+        {
+            LevelScreenManager.Instance.UnlockNextLevel(
+                _currentWorldId,
+                _currentLevelId
+            );
+        }
 
         Debug.Log(
             $"Skipped level '{_currentLevelId}'. " +

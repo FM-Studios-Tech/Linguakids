@@ -15,6 +15,48 @@ const SHEETS = {
   quizOptions: 'Quiz Options',
 } as const;
 
+const SIMPLE_SHEETS = {
+  worlds: 'Worlds',
+  levels: 'Levels',
+  lessons: 'Lessons',
+  learningItems: 'Learning Items',
+  quizzes: 'Quizzes',
+} as const;
+
+const SIMPLE_REQUIRED_HEADERS: Record<string, string[]> = {
+  [SIMPLE_SHEETS.worlds]: ['World ID', 'World Name', 'Display Order'],
+  [SIMPLE_SHEETS.levels]: ['World', 'Level ID', 'Level Name', 'Display Order'],
+  [SIMPLE_SHEETS.lessons]: [
+    'World',
+    'Level',
+    'Lesson ID',
+    'Lesson Name',
+    'Display Order',
+    'Learning Screen Title',
+    'Learning Screen Description',
+  ],
+  [SIMPLE_SHEETS.learningItems]: [
+    'World',
+    'Level',
+    'Lesson',
+    'Item Number',
+    'Letter',
+    'English Word',
+    'Arabic Word',
+  ],
+  [SIMPLE_SHEETS.quizzes]: [
+    'World',
+    'Level',
+    'Lesson',
+    'Quiz Type',
+    'Sequence',
+    'Question / Prompt',
+    'Correct Answer',
+    'Wrong Answer 1',
+    'Wrong Answer 2',
+  ],
+};
+
 const REQUIRED_HEADERS: Record<string, string[]> = {
   [SHEETS.worlds]: ['world_id', 'title', 'order'],
   [SHEETS.levels]: ['world_id', 'level_id', 'title', 'order'],
@@ -163,6 +205,37 @@ function getRows(workbook: XLSX.WorkBook, sheetName: string): ExcelRow[] {
     .filter(hasValues);
 }
 
+function getSimpleRows(workbook: XLSX.WorkBook, sheetName: string): ExcelRow[] {
+  const sheet = workbook.Sheets[sheetName];
+  if (!sheet) {
+    throw new Error(`Missing required sheet '${sheetName}'. Use the simplified template.`);
+  }
+
+  const matrix = XLSX.utils.sheet_to_json<unknown[]>(sheet, {
+    header: 1,
+    defval: '',
+    raw: false,
+  });
+  const headers = (matrix[0] || []).map((value) => text(value));
+  const missingHeaders = SIMPLE_REQUIRED_HEADERS[sheetName].filter(
+    (header) => !headers.includes(header)
+  );
+
+  if (missingHeaders.length > 0) {
+    throw new Error(
+      `${sheetName}: missing column(s) ${missingHeaders.join(', ')}. Do not rename template headers.`
+    );
+  }
+
+  return XLSX.utils
+    .sheet_to_json<ExcelRow>(sheet, { defval: '', raw: false })
+    .filter(hasValues);
+}
+
+function shortId(prefix: string, number: number): string {
+  return `${prefix}_${String(number).padStart(3, '0')}`;
+}
+
 function findLesson(
   state: AppState,
   worldId: string,
@@ -189,6 +262,288 @@ function findLesson(
   return lesson;
 }
 
+function importSimpleWorkbook(
+  workbook: XLSX.WorkBook,
+  currentState: AppState
+): ExcelImportSummary {
+  const worldsRows = getSimpleRows(workbook, SIMPLE_SHEETS.worlds);
+  const levelsRows = getSimpleRows(workbook, SIMPLE_SHEETS.levels);
+  const lessonsRows = getSimpleRows(workbook, SIMPLE_SHEETS.lessons);
+  const learningRows = getSimpleRows(workbook, SIMPLE_SHEETS.learningItems);
+  const quizzesRows = getSimpleRows(workbook, SIMPLE_SHEETS.quizzes);
+
+  const state = cloneState(currentState);
+  state.worlds ||= {};
+
+  worldsRows.forEach((row, index) => {
+    const rowNumber = index + 2;
+    const worldId = requireText(row, 'World ID', SIMPLE_SHEETS.worlds, rowNumber);
+    const title = requireText(row, 'World Name', SIMPLE_SHEETS.worlds, rowNumber);
+    const order = integer(
+      row['Display Order'],
+      `${SIMPLE_SHEETS.worlds}.Display Order`,
+      rowNumber,
+      1
+    );
+    const existing = state.worlds[worldId];
+
+    state.worlds[worldId] = {
+      title,
+      order,
+      buttonImageUrl: existing?.buttonImageUrl ?? '',
+      backgroundImageUrl: existing?.backgroundImageUrl ?? '',
+      levels: existing?.levels ?? {},
+    };
+  });
+
+  levelsRows.forEach((row, index) => {
+    const rowNumber = index + 2;
+    const worldId = requireText(row, 'World', SIMPLE_SHEETS.levels, rowNumber);
+    const levelId = requireText(row, 'Level ID', SIMPLE_SHEETS.levels, rowNumber);
+    const title = requireText(row, 'Level Name', SIMPLE_SHEETS.levels, rowNumber);
+    const order = integer(
+      row['Display Order'],
+      `${SIMPLE_SHEETS.levels}.Display Order`,
+      rowNumber,
+      1
+    );
+    const world = state.worlds[worldId];
+
+    if (!world) {
+      throw new Error(
+        `${SIMPLE_SHEETS.levels}, row ${rowNumber}: World '${worldId}' does not exist.`
+      );
+    }
+
+    const existing = world.levels?.[levelId];
+    world.levels ||= {};
+    world.levels[levelId] = {
+      title,
+      order,
+      lessons: existing?.lessons ?? {},
+    };
+  });
+
+  lessonsRows.forEach((row, index) => {
+    const rowNumber = index + 2;
+    const worldId = requireText(row, 'World', SIMPLE_SHEETS.lessons, rowNumber);
+    const levelId = requireText(row, 'Level', SIMPLE_SHEETS.lessons, rowNumber);
+    const lessonId = requireText(row, 'Lesson ID', SIMPLE_SHEETS.lessons, rowNumber);
+    const title = requireText(row, 'Lesson Name', SIMPLE_SHEETS.lessons, rowNumber);
+    const order = integer(
+      row['Display Order'],
+      `${SIMPLE_SHEETS.lessons}.Display Order`,
+      rowNumber,
+      1
+    );
+    const world = state.worlds[worldId];
+    const level = world?.levels?.[levelId];
+
+    if (!world) {
+      throw new Error(
+        `${SIMPLE_SHEETS.lessons}, row ${rowNumber}: World '${worldId}' does not exist.`
+      );
+    }
+    if (!level) {
+      throw new Error(
+        `${SIMPLE_SHEETS.lessons}, row ${rowNumber}: Level '${levelId}' does not exist in '${worldId}'.`
+      );
+    }
+
+    const existing = level.lessons?.[lessonId];
+    level.lessons ||= {};
+    level.lessons[lessonId] = {
+      title,
+      order,
+      data: {
+        learningItems: {
+          name: text(row['Learning Screen Title']),
+          description: text(row['Learning Screen Description']),
+          gridSize: existing?.data?.learningItems?.gridSize ?? {
+            rows: 3,
+            columns: 1,
+          },
+          items: existing?.data?.learningItems?.items ?? {},
+        },
+        quizzes: existing?.data?.quizzes ?? {},
+      },
+    };
+  });
+
+  const seenItems = new Set<string>();
+
+  learningRows.forEach((row, index) => {
+    const rowNumber = index + 2;
+    const worldId = requireText(row, 'World', SIMPLE_SHEETS.learningItems, rowNumber);
+    const levelId = requireText(row, 'Level', SIMPLE_SHEETS.learningItems, rowNumber);
+    const lessonId = requireText(row, 'Lesson', SIMPLE_SHEETS.learningItems, rowNumber);
+    const itemNumber = integer(
+      row['Item Number'],
+      `${SIMPLE_SHEETS.learningItems}.Item Number`,
+      rowNumber,
+      1,
+      999
+    );
+    const itemId = shortId('item', itemNumber);
+    const path = `${worldId}/${levelId}/${lessonId}/${itemId}`;
+
+    if (seenItems.has(path)) {
+      throw new Error(
+        `${SIMPLE_SHEETS.learningItems}, row ${rowNumber}: Item Number ${itemNumber} is duplicated in this lesson.`
+      );
+    }
+    seenItems.add(path);
+
+    const lesson = findLesson(
+      state,
+      worldId,
+      levelId,
+      lessonId,
+      SIMPLE_SHEETS.learningItems,
+      rowNumber
+    );
+    const existingItem = lesson.data.learningItems.items[itemId];
+    const existingCells = existingItem?.cells ?? {};
+
+    lesson.data.learningItems.items[itemId] = {
+      cells: {
+        cell_1_1: {
+          row: 1,
+          column: 1,
+          language: 'english',
+          text: requireText(row, 'Letter', SIMPLE_SHEETS.learningItems, rowNumber),
+          audioUrl: existingCells.cell_1_1?.audioUrl ?? '',
+        },
+        cell_2_1: {
+          row: 2,
+          column: 1,
+          language: 'english',
+          text: requireText(row, 'English Word', SIMPLE_SHEETS.learningItems, rowNumber),
+          audioUrl: existingCells.cell_2_1?.audioUrl ?? '',
+        },
+        cell_3_1: {
+          row: 3,
+          column: 1,
+          language: 'arabic',
+          text: requireText(row, 'Arabic Word', SIMPLE_SHEETS.learningItems, rowNumber),
+          audioUrl: existingCells.cell_3_1?.audioUrl ?? '',
+        },
+      },
+    };
+  });
+
+  const seenQuizzes = new Set<string>();
+  let quizOptions = 0;
+
+  quizzesRows.forEach((row, index) => {
+    const rowNumber = index + 2;
+    const worldId = requireText(row, 'World', SIMPLE_SHEETS.quizzes, rowNumber);
+    const levelId = requireText(row, 'Level', SIMPLE_SHEETS.quizzes, rowNumber);
+    const lessonId = requireText(row, 'Lesson', SIMPLE_SHEETS.quizzes, rowNumber);
+    const quizType = requireText(
+      row,
+      'Quiz Type',
+      SIMPLE_SHEETS.quizzes,
+      rowNumber
+    ) as QuizType;
+    const sequence = integer(
+      row.Sequence,
+      `${SIMPLE_SHEETS.quizzes}.Sequence`,
+      rowNumber,
+      1,
+      999
+    );
+
+    if (!QUIZ_TYPES.has(quizType)) {
+      throw new Error(
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: invalid Quiz Type '${quizType}'.`
+      );
+    }
+
+    const quizId = shortId('quiz', sequence);
+    const path = `${worldId}/${levelId}/${lessonId}/${quizId}`;
+    if (seenQuizzes.has(path)) {
+      throw new Error(
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Sequence ${sequence} is duplicated in this lesson.`
+      );
+    }
+    seenQuizzes.add(path);
+
+    const lesson = findLesson(
+      state,
+      worldId,
+      levelId,
+      lessonId,
+      SIMPLE_SHEETS.quizzes,
+      rowNumber
+    );
+    const existing = lesson.data.quizzes[quizId];
+    const questionOrPrompt = text(row['Question / Prompt']);
+    const correctAnswer = text(row['Correct Answer']);
+    const wrongAnswer1 = text(row['Wrong Answer 1']);
+    const wrongAnswer2 = text(row['Wrong Answer 2']);
+
+    if (
+      (quizType === 'text_multiple_choice' || quizType === 'audio_multiple_choice') &&
+      (!correctAnswer || !wrongAnswer1 || !wrongAnswer2)
+    ) {
+      throw new Error(
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: multiple-choice quizzes require Correct Answer and both Wrong Answers.`
+      );
+    }
+    if (quizType === 'text_multiple_choice' && !questionOrPrompt) {
+      throw new Error(
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Question / Prompt is required for text multiple choice.`
+      );
+    }
+    if (quizType === 'audio_typing' && !correctAnswer) {
+      throw new Error(
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Correct Answer is required for audio typing.`
+      );
+    }
+    if (quizType === 'arabic_voice_record' && !questionOrPrompt) {
+      throw new Error(
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Question / Prompt is required for Arabic voice record.`
+      );
+    }
+
+    const isMultipleChoice =
+      quizType === 'text_multiple_choice' || quizType === 'audio_multiple_choice';
+    const options: Record<string, { text: string }> = {};
+
+    if (isMultipleChoice) {
+      options.option_001 = { text: correctAnswer };
+      options.option_002 = { text: wrongAnswer1 };
+      options.option_003 = { text: wrongAnswer2 };
+    }
+
+    if (isMultipleChoice) quizOptions += 3;
+
+    lesson.data.quizzes[quizId] = {
+      type: quizType,
+      order: sequence - 1,
+      questionText: quizType === 'text_multiple_choice' ? questionOrPrompt : '',
+      questionAudioUrl: existing?.questionAudioUrl ?? '',
+      correctOptionId: isMultipleChoice ? 'option_001' : '',
+      correctAnswerText: quizType === 'audio_typing' ? correctAnswer : '',
+      arabicPromptText: '',
+      englishPromptText:
+        quizType === 'arabic_voice_record' ? questionOrPrompt : '',
+      options,
+    };
+  });
+
+  return {
+    state,
+    worlds: worldsRows.length,
+    levels: levelsRows.length,
+    lessons: lessonsRows.length,
+    learningCells: learningRows.length * 3,
+    quizzes: quizzesRows.length,
+    quizOptions,
+  };
+}
+
 /**
  * Imports the text-only workbook as an upsert. Existing Cloudflare image and
  * audio URLs are deliberately preserved; new records receive empty media URLs.
@@ -198,6 +553,11 @@ export async function importTextWorkbook(
   currentState: AppState
 ): Promise<ExcelImportSummary> {
   const workbook = XLSX.read(data, { type: 'array' });
+
+  if (workbook.SheetNames.includes(SIMPLE_SHEETS.learningItems)) {
+    return importSimpleWorkbook(workbook, currentState);
+  }
+
   const worldsRows = getRows(workbook, SHEETS.worlds);
   const levelsRows = getRows(workbook, SHEETS.levels);
   const lessonsRows = getRows(workbook, SHEETS.lessons);
