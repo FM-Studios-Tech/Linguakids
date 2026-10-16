@@ -371,6 +371,7 @@ function importSimpleWorkbook(
   });
 
   const seenItems = new Set<string>();
+  let learningCells = 0;
 
   learningRows.forEach((row, index) => {
     const rowNumber = index + 2;
@@ -404,32 +405,52 @@ function importSimpleWorkbook(
     );
     const existingItem = lesson.data.learningItems.items[itemId];
     const existingCells = existingItem?.cells ?? {};
+    const letter = text(row.Letter);
+    const englishWord = text(row['English Word']);
+    const arabicWord = text(row['Arabic Word']);
+    const cells: Record<string, {
+      row: number;
+      column: number;
+      language: LearningCellLanguage;
+      text: string;
+      audioUrl: string;
+    }> = {};
+
+    if (letter) {
+      cells.cell_1_1 = {
+        row: 1,
+        column: 1,
+        language: 'english',
+        text: letter,
+        audioUrl: existingCells.cell_1_1?.audioUrl ?? '',
+      };
+    }
+
+    if (englishWord) {
+      cells.cell_2_1 = {
+        row: 2,
+        column: 1,
+        language: 'english',
+        text: englishWord,
+        audioUrl: existingCells.cell_2_1?.audioUrl ?? '',
+      };
+    }
+
+    if (arabicWord) {
+      cells.cell_3_1 = {
+        row: 3,
+        column: 1,
+        language: 'arabic',
+        text: arabicWord,
+        audioUrl: existingCells.cell_3_1?.audioUrl ?? '',
+      };
+    }
 
     lesson.data.learningItems.items[itemId] = {
-      cells: {
-        cell_1_1: {
-          row: 1,
-          column: 1,
-          language: 'english',
-          text: requireText(row, 'Letter', SIMPLE_SHEETS.learningItems, rowNumber),
-          audioUrl: existingCells.cell_1_1?.audioUrl ?? '',
-        },
-        cell_2_1: {
-          row: 2,
-          column: 1,
-          language: 'english',
-          text: requireText(row, 'English Word', SIMPLE_SHEETS.learningItems, rowNumber),
-          audioUrl: existingCells.cell_2_1?.audioUrl ?? '',
-        },
-        cell_3_1: {
-          row: 3,
-          column: 1,
-          language: 'arabic',
-          text: requireText(row, 'Arabic Word', SIMPLE_SHEETS.learningItems, rowNumber),
-          audioUrl: existingCells.cell_3_1?.audioUrl ?? '',
-        },
-      },
+      cells,
     };
+
+    learningCells += Object.keys(cells).length;
   });
 
   const seenQuizzes = new Set<string>();
@@ -485,10 +506,10 @@ function importSimpleWorkbook(
 
     if (
       (quizType === 'text_multiple_choice' || quizType === 'audio_multiple_choice') &&
-      (!correctAnswer || !wrongAnswer1 || !wrongAnswer2)
+      !correctAnswer
     ) {
       throw new Error(
-        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: multiple-choice quizzes require Correct Answer and both Wrong Answers.`
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: multiple-choice quizzes require a Correct Answer.`
       );
     }
     if (quizType === 'text_multiple_choice' && !questionOrPrompt) {
@@ -513,11 +534,11 @@ function importSimpleWorkbook(
 
     if (isMultipleChoice) {
       options.option_001 = { text: correctAnswer };
-      options.option_002 = { text: wrongAnswer1 };
-      options.option_003 = { text: wrongAnswer2 };
+      if (wrongAnswer1) options.option_002 = { text: wrongAnswer1 };
+      if (wrongAnswer2) options.option_003 = { text: wrongAnswer2 };
     }
 
-    if (isMultipleChoice) quizOptions += 3;
+    if (isMultipleChoice) quizOptions += Object.keys(options).length;
 
     lesson.data.quizzes[quizId] = {
       type: quizType,
@@ -538,7 +559,7 @@ function importSimpleWorkbook(
     worlds: worldsRows.length,
     levels: levelsRows.length,
     lessons: lessonsRows.length,
-    learningCells: learningRows.length * 3,
+    learningCells,
     quizzes: quizzesRows.length,
     quizOptions,
   };
