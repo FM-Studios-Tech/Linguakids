@@ -17,7 +17,7 @@ A premium admin dashboard for managing kids' language learning content — world
 
 ## Prerequisites
 
-- **Node.js** 18.17 or newer (Node 20 recommended)
+- **Node.js** 20 or newer (Node 22 recommended)
 - **npm** 9+ (ships with Node)
 - A **Firebase** account (free Spark plan is fine)
 - A **Cloudflare** account (free R2 plan includes 10 GB storage)
@@ -42,11 +42,32 @@ npm run dev
 
 The app will be available at **http://localhost:3000**.
 
-### 3. Try the "Save to Firebase" button
+### 3. Sign in and review content before saving
 
-The header has a **Save to Firebase** button. In its current state it `console.log`s the entire app state as JSON. Open your browser DevTools (F12 → Console tab) and click the button — you will see the full nested JSON object printed.
+Enable Firebase Email/Password authentication and sign in with an account that has
+the Firebase custom claim `admin: true`. An authorized project administrator must
+assign this claim using the Firebase Admin SDK in a trusted environment. Sign out
+and sign back in after assigning it. Add the deployed website domain to Firebase
+Authentication's authorized domains. The upload endpoint verifies the admin claim
+on the server; non-admin accounts cannot use it.
 
-Once you complete the Firebase setup below, this button can be wired to actually write to your database.
+Realtime Database writes to `appState` should also require the admin claim in your
+database rules. A permissive root write rule overrides narrower child rules; keep
+the existing rules for other application data protected.
+
+Create worlds, levels and lessons manually. In **Lessons**, choose **Import Excel**
+beside a lesson, inspect the preview, and apply it to the local editor state.
+Imports do not automatically save to Firebase. Review in **Lesson Editor**, then
+click **Save to Firebase** to write the current content to `appState`.
+
+The editor supports text/audio multiple choice, text/audio typing, true/false and
+speaking practice. Text Typing accepts Arabic or English prompts and English
+answers. True/False stores the answer as a boolean, including `false`.
+
+Download the [single-sheet lesson sample](public/templates/lesson-content-sample.xlsx)
+and [AI planning instructions](public/templates/lesson-content-chatgpt-prompt.md).
+The instructions work with ChatGPT, Gemini or Claude and require content approval
+before filling the workbook.
 
 ### 4. Build & type-check (optional, before deploying)
 
@@ -58,6 +79,16 @@ npm run typecheck
 Both should pass with no errors.
 
 ---
+
+
+### Import validation
+
+```bash
+node --test scripts/test-quiz-import.cjs scripts/test-lesson-import.cjs
+```
+
+The test fixtures for the earlier workbook formats are already tracked under
+`outputs/linguakids-short-ids` and `outputs/linguakids-simple-template`.
 
 ## Connecting Firebase Realtime Database
 

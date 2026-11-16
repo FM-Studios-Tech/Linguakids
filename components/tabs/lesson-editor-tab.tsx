@@ -938,6 +938,8 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
     'text_multiple_choice',
     'audio_multiple_choice',
     'audio_typing',
+    'text_typing',
+    'true_false',
     'arabic_voice_record',
   ];
 
@@ -945,6 +947,8 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
     text_multiple_choice: <Plus className="h-4 w-4" />,
     audio_multiple_choice: <AudioLines className="h-4 w-4" />,
     audio_typing: <Keyboard className="h-4 w-4" />,
+    text_typing: <Keyboard className="h-4 w-4" />,
+    true_false: <ListChecks className="h-4 w-4" />,
     arabic_voice_record: <Mic className="h-4 w-4" />,
   };
 
@@ -1447,6 +1451,22 @@ export function LessonEditorTab({ actions, worlds }: LessonEditorTabProps) {
                   <Separator className="my-2" />
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => addQuizTyped('text_typing')}
+                      className="gap-2 border-dashed"
+                    >
+                      <Keyboard className="h-4 w-4" />
+                      Text Typing Quiz
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => addQuizTyped('true_false')}
+                      className="gap-2 border-dashed"
+                    >
+                      <ListChecks className="h-4 w-4" />
+                      True / False Quiz
+                    </Button>
                     <Button
                       variant="outline"
                       onClick={() => addQuizTyped('text_multiple_choice')}

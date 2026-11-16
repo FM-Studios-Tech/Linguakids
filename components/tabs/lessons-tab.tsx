@@ -10,7 +10,9 @@ import {
   X,
   ChevronDown,
   FileText,
+  Download,
 } from 'lucide-react';
+import { LessonContentImport } from './lesson-content-import';
 import {
   Card,
   CardContent,
@@ -71,6 +73,7 @@ export function LessonsTab({ actions, worlds }: LessonsTabProps) {
   const [formTitle, setFormTitle] = useState('');
   const [formOrder, setFormOrder] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [importedLesson, setImportedLesson] = useState('');
 
   const worldEntries = Object.entries(worlds).sort(([, a], [, b]) => a.order - b.order);
   const selectedWorld = selectedWorldId ? worlds[selectedWorldId] : null;
@@ -147,6 +150,21 @@ export function LessonsTab({ actions, worlds }: LessonsTabProps) {
           Select a world and level, then manage the lessons within them.
         </p>
       </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border bg-card p-4">
+        <p className="max-w-xl text-sm text-muted-foreground">
+          Create worlds, levels, and lessons manually. Use Import Excel beside a lesson to add its learning items and quizzes, then review before saving to Firebase.
+        </p>
+        <Button variant="outline" asChild className="gap-2">
+          <a href="/templates/lesson-content-sample.xlsx" download>
+            <Download className="h-4 w-4" /> Single-Sheet Sample
+          </a>
+        </Button>
+        <a href="/templates/lesson-content-chatgpt-prompt.md" download className="text-sm text-primary underline underline-offset-4">Download AI planning instructions</a>
+      </div>
+      {importedLesson && <p role="status" className="rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+        Imported into {importedLesson} locally. Review the content in Lesson Editor, then click Save to Firebase when ready.
+      </p>}
 
       <Card>
         <CardHeader className="pb-4">
@@ -245,7 +263,7 @@ export function LessonsTab({ actions, worlds }: LessonsTabProps) {
                     <TableHead>Lesson Title</TableHead>
                     <TableHead className="w-[100px] text-center">Items</TableHead>
                     <TableHead className="w-[100px] text-center">Quizzes</TableHead>
-                    <TableHead className="w-[120px] text-right">Actions</TableHead>
+                    <TableHead className="w-[240px] text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -271,6 +289,14 @@ export function LessonsTab({ actions, worlds }: LessonsTabProps) {
                       </TableCell>
                       <TableCell>
                         <div className="flex justify-end gap-1">
+                          <LessonContentImport
+                            lessonTitle={lesson.title}
+                            data={lesson.data}
+                            onApply={(data) => {
+                              actions.updateLessonData(selectedWorldId, selectedLevelId, id, data);
+                              setImportedLesson(lesson.title);
+                            }}
+                          />
                           <Button
                             variant="ghost"
                             size="icon"

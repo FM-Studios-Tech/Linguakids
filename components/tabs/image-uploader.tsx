@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from 'react';
 import { CheckCircle2, Image as ImageIcon, Loader2, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { getFirebaseAuth } from '@/lib/firebase';
 
 interface ImageUploaderProps {
   value: string;
@@ -36,6 +37,7 @@ export function ImageUploader({ value, onChange, label }: ImageUploaderProps) {
 
         const response = await fetch('/api/upload', {
           method: 'POST',
+          headers: { Authorization: 'Bearer ' + await getFirebaseAuth().currentUser?.getIdToken() },
           body: formData,
         });
         const data = await response.json();

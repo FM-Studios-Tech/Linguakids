@@ -109,6 +109,8 @@ const QUIZ_TYPES = new Set<QuizType>([
   'text_multiple_choice',
   'audio_multiple_choice',
   'audio_typing',
+  'text_typing',
+  'true_false',
   'arabic_voice_record',
 ]);
 
@@ -155,6 +157,13 @@ function integer(
     );
   }
   return parsed;
+}
+
+function trueFalseAnswer(value: unknown, sheetName: string, rowNumber: number): boolean {
+  const answer = text(value).toLowerCase();
+  if (answer === 'true') return true;
+  if (answer === 'false') return false;
+  throw new Error(`${sheetName}, row ${rowNumber}: Correct Answer must be True or False for true_false.`);
 }
 
 function cloneState(state: AppState): AppState {
@@ -512,14 +521,17 @@ function importSimpleWorkbook(
         `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: multiple-choice quizzes require a Correct Answer.`
       );
     }
-    if (quizType === 'text_multiple_choice' && !questionOrPrompt) {
+    if (
+      (quizType === 'text_multiple_choice' || quizType === 'text_typing' || quizType === 'true_false') &&
+      !questionOrPrompt
+    ) {
       throw new Error(
-        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Question / Prompt is required for text multiple choice.`
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Question / Prompt is required for ${quizType}.`
       );
     }
-    if (quizType === 'audio_typing' && !correctAnswer) {
+    if ((quizType === 'audio_typing' || quizType === 'text_typing') && !correctAnswer) {
       throw new Error(
-        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Correct Answer is required for audio typing.`
+        `${SIMPLE_SHEETS.quizzes}, row ${rowNumber}: Correct Answer is required for ${quizType}.`
       );
     }
     if (quizType === 'arabic_voice_record' && !questionOrPrompt) {
@@ -543,10 +555,17 @@ function importSimpleWorkbook(
     lesson.data.quizzes[quizId] = {
       type: quizType,
       order: sequence - 1,
-      questionText: quizType === 'text_multiple_choice' ? questionOrPrompt : '',
+      questionText:
+        quizType === 'text_multiple_choice' || quizType === 'text_typing' || quizType === 'true_false'
+          ? questionOrPrompt
+          : '',
       questionAudioUrl: existing?.questionAudioUrl ?? '',
       correctOptionId: isMultipleChoice ? 'option_001' : '',
-      correctAnswerText: quizType === 'audio_typing' ? correctAnswer : '',
+      correctAnswerText: quizType === 'audio_typing' || quizType === 'text_typing' ? correctAnswer : '',
+      correctAnswerBoolean:
+        quizType === 'true_false'
+          ? trueFalseAnswer(row['Correct Answer'], SIMPLE_SHEETS.quizzes, rowNumber)
+          : undefined,
       arabicPromptText: '',
       englishPromptText:
         quizType === 'arabic_voice_record' ? questionOrPrompt : '',
@@ -738,10 +757,18 @@ export async function importTextWorkbook(
       questionText: text(row.question_text),
       questionAudioUrl: existing?.questionAudioUrl ?? '',
       correctOptionId: text(row.correct_option_id),
-      correctAnswerText: text(row.correct_answer_text),
+      correctAnswerText: quizType === 'true_false' ? undefined : text(row.correct_answer_text),
+      correctAnswerBoolean:
+        quizType === 'true_false'
+          ? trueFalseAnswer(
+              text(row.correct_answer_boolean) || row.correct_answer_text,
+              SHEETS.quizzes,
+              rowNumber
+            )
+          : undefined,
       arabicPromptText: text(row.arabic_prompt_text),
       englishPromptText: text(row.english_prompt_text),
-      options: existing?.options ?? {},
+      options: quizType === 'text_typing' || quizType === 'true_false' ? {} : existing?.options ?? {},
     };
   });
 
@@ -788,8 +815,12 @@ export async function importTextWorkbook(
       );
     }
 
-    if (quiz.type === 'audio_typing' && !quiz.correctAnswerText) {
-      throw new Error(`${SHEETS.quizzes}, row ${rowNumber}: correct_answer_text is required for audio_typing.`);
+    if ((quiz.type === 'audio_typing' || quiz.type === 'text_typing') && !quiz.correctAnswerText) {
+      throw new Error(`${SHEETS.quizzes}, row ${rowNumber}: correct_answer_text is required for ${quiz.type}.`);
+    }
+
+    if ((quiz.type === 'text_typing' || quiz.type === 'true_false') && !quiz.questionText) {
+      throw new Error(`${SHEETS.quizzes}, row ${rowNumber}: question_text is required for ${quiz.type}.`);
     }
 
     if (quiz.type === 'arabic_voice_record' && !quiz.englishPromptText) {

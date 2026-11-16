@@ -152,6 +152,7 @@ import { useRef, useState, useCallback } from 'react';
 import { Upload, AudioLines, X, CheckCircle2, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { getFirebaseAuth } from '@/lib/firebase';
 
 interface AudioUploaderProps {
   value: string;
@@ -184,7 +185,8 @@ export function AudioUploader({
         formData.append('file', file);
         
         const res = await fetch('/api/upload', { 
-          method: 'POST', 
+          method: 'POST',
+          headers: { Authorization: 'Bearer ' + await getFirebaseAuth().currentUser?.getIdToken() },
           body: formData 
         });
         

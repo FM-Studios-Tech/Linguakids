@@ -386,14 +386,16 @@ function reducer(state: AppState, action: Action): AppState {
             const lessonData = lesson.data || {};
             const incomingCollection = lessonData.learningItems || {};
             const isWrappedCollection =
-              incomingCollection.items && typeof incomingCollection.items === 'object';
+              ['items', 'gridSize', 'name', 'description'].some((key) =>
+                Object.prototype.hasOwnProperty.call(incomingCollection, key)
+              );
             const incomingLearningItems = isWrappedCollection
-              ? incomingCollection.items
+              ? incomingCollection.items || {}
               : incomingCollection;
             const sanitizedLearningItems: Record<string, LearningItem> = {};
             const incomingGrid = lessonData.learningItemsGrid;
             const looksLikeGrid = Object.values(incomingLearningItems).some(
-              (item: any) => item && ('language' in item || 'row' in item || 'column' in item)
+              (item: any) => item && typeof item === 'object' && ('language' in item || 'row' in item || 'column' in item)
             );
             const wasLessonLevelGrid =
               lessonData.learningItemsMode === 'grid' || Boolean(incomingGrid) || looksLikeGrid;

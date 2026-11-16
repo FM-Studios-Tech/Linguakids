@@ -792,6 +792,8 @@ export const QUIZ_TYPE_LABELS: Record<QuizType, string> = {
   text_multiple_choice: 'Text Multiple Choice',
   audio_multiple_choice: 'Audio Multiple Choice',
   audio_typing: 'Audio Typing',
+  text_typing: 'Text Typing',
+  true_false: 'True / False',
   arabic_voice_record: 'Reading Quiz',
 };
 
@@ -799,6 +801,8 @@ export const QUIZ_TYPE_ICONS: Record<QuizType, React.ReactNode> = {
   text_multiple_choice: <ListChecks className="h-3.5 w-3.5" />,
   audio_multiple_choice: <Headphones className="h-3.5 w-3.5" />,
   audio_typing: <Keyboard className="h-3.5 w-3.5" />,
+  text_typing: <Keyboard className="h-3.5 w-3.5" />,
+  true_false: <CheckCircle2 className="h-3.5 w-3.5" />,
   arabic_voice_record: <Mic className="h-3.5 w-3.5" />,
 };
 
@@ -832,21 +836,24 @@ export function QuizCard({ quizId, index, total, quiz, onChange, onRemove, onMov
 
   function handleTypeChange(type: string) {
     const quizType = type as QuizType;
-    const patch: Partial<Quiz> = { type: quizType };
-    if (quizType === 'audio_typing') {
-      patch.options = undefined;
-      patch.correctOptionId = undefined;
-      patch.arabicPromptText = undefined;
-      if (!quiz.correctAnswerText) patch.correctAnswerText = '';
-    } else if (quizType === 'arabic_voice_record') {
-      patch.options = undefined;
-      patch.correctOptionId = undefined;
-      patch.correctAnswerText = undefined;
-      patch.questionText = undefined;
-      patch.questionAudioUrl = undefined;
-      if (!quiz.arabicPromptText) patch.arabicPromptText = '';
-    } else {
-      patch.correctAnswerText = undefined;
+    const isMultipleChoice =
+      quizType === 'text_multiple_choice' || quizType === 'audio_multiple_choice';
+    const isTyping = quizType === 'audio_typing' || quizType === 'text_typing';
+    const hasTextQuestion =
+      quizType === 'text_multiple_choice' || quizType === 'text_typing' || quizType === 'true_false';
+    const hasAudioQuestion = quizType === 'audio_multiple_choice' || quizType === 'audio_typing';
+    const patch: Partial<Quiz> = {
+      type: quizType,
+      questionText: hasTextQuestion ? quiz.questionText ?? '' : undefined,
+      questionAudioUrl: hasAudioQuestion ? quiz.questionAudioUrl ?? '' : undefined,
+      correctAnswerText: isTyping ? quiz.correctAnswerText ?? '' : undefined,
+      correctAnswerBoolean: quizType === 'true_false' ? quiz.correctAnswerBoolean ?? true : undefined,
+      arabicPromptText: quizType === 'arabic_voice_record' ? quiz.arabicPromptText ?? '' : undefined,
+      englishPromptText: quizType === 'arabic_voice_record' ? quiz.englishPromptText ?? '' : undefined,
+      options: isMultipleChoice ? quiz.options : undefined,
+      correctOptionId: isMultipleChoice ? quiz.correctOptionId : undefined,
+    };
+    if (isMultipleChoice) {
       if (!quiz.options || Object.keys(quiz.options).length === 0) {
         const opt1 = generateId('option');
         const opt2 = generateId('option', [opt1]);
@@ -1071,6 +1078,57 @@ export function QuizCard({ quizId, index, total, quiz, onChange, onRemove, onMov
           </div>
         )}
 
+        {(quiz.type === 'text_typing' || quiz.type === 'true_false') && (
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor={`${quizId}-question`} className="text-xs">
+                {quiz.type === 'true_false' ? 'Statement (Arabic or English)' : 'Question Text (Arabic or English)'}
+              </Label>
+              <Input
+                id={`${quizId}-question`}
+                value={quiz.questionText ?? ''}
+                onChange={(event) => onChange(quizId, { questionText: event.target.value })}
+                placeholder={quiz.type === 'true_false' ? 'Enter a statement...' : 'Enter the question...'}
+                dir="auto"
+                className="bg-background"
+              />
+            </div>
+            {quiz.type === 'text_typing' ? (
+              <div className="space-y-1.5">
+                <Label htmlFor={`${quizId}-answer`} className="text-xs">Correct Answer (English)</Label>
+                <Input
+                  id={`${quizId}-answer`}
+                  value={quiz.correctAnswerText ?? ''}
+                  onChange={(event) => onChange(quizId, { correctAnswerText: event.target.value })}
+                  placeholder="Enter the correct English answer..."
+                  dir="ltr"
+                  lang="en"
+                  className="bg-background"
+                />
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Label className="text-xs">Correct Answer</Label>
+                <RadioGroup
+                  aria-label="Correct true or false answer"
+                  value={quiz.correctAnswerBoolean === undefined ? '' : String(quiz.correctAnswerBoolean)}
+                  onValueChange={(value) => onChange(quizId, { correctAnswerBoolean: value === 'true' })}
+                  className="flex gap-6"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem id={`${quizId}-true`} value="true" />
+                    <Label htmlFor={`${quizId}-true`}>True</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem id={`${quizId}-false`} value="false" />
+                    <Label htmlFor={`${quizId}-false`}>False</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+            )}
+          </div>
+        )}
+
         {quiz.type === 'audio_typing' && (
           <div className="space-y-4">
             <div className="space-y-1.5">
@@ -1145,6 +1203,12 @@ export function QuizCard({ quizId, index, total, quiz, onChange, onRemove, onMov
 }
 
 export function createEmptyQuiz(type: QuizType = 'text_multiple_choice'): Quiz {
+  if (type === 'text_typing') {
+    return { type, questionText: '', correctAnswerText: '' };
+  }
+  if (type === 'true_false') {
+    return { type, questionText: '', correctAnswerBoolean: true };
+  }
   if (type === 'audio_typing') {
     return {
       type,

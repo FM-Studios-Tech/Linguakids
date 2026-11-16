@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadFile } from '@/lib/r2-upload';
+import { isFirebaseAdministrator } from '@/lib/firebase-admin';
 
 const MAX_AUDIO_SIZE = 20 * 1024 * 1024;
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
@@ -9,6 +10,9 @@ function safeFileName(fileName: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  if (!(await isFirebaseAdministrator(req.headers.get('authorization')))) {
+    return NextResponse.json({ error: 'Administrator sign-in required' }, { status: 403 });
+  }
   let formData: FormData;
   try {
     formData = await req.formData();
