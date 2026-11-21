@@ -56,6 +56,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import type { AppActions } from '@/lib/use-app-state';
+import { levelOrderError } from '@/lib/use-app-state';
 import type { World, Level } from '@/lib/types';
 
 interface LevelsTabProps {
@@ -67,7 +68,6 @@ export function LevelsTab({ actions, worlds }: LevelsTabProps) {
   const [selectedWorldId, setSelectedWorldId] = useState<string>('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [formTitle, setFormTitle] = useState('');
   const [formOrder, setFormOrder] = useState(1);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
@@ -84,32 +84,28 @@ export function LevelsTab({ actions, worlds }: LevelsTabProps) {
 
   function openAdd() {
     setEditingId(null);
-    setFormTitle('');
-    setFormOrder(
-      levelEntries.length > 0
-        ? Math.max(...levelEntries.map(([, l]) => l.order)) + 1
-        : 1
-    );
+    let nextOrder = 1;
+    while (levelOrderError(selectedWorld?.levels || {}, nextOrder)) nextOrder++;
+    setFormOrder(nextOrder);
     setDialogOpen(true);
   }
 
   function openEdit(id: string, level: Level) {
     setEditingId(id);
-    setFormTitle(level.title);
     setFormOrder(level.order);
     setDialogOpen(true);
   }
 
   function handleSave() {
-    if (!formTitle.trim() || !selectedWorldId) return;
+    if (!selectedWorld || levelOrderError(selectedWorld.levels || {}, formOrder, editingId)) return;
     if (editingId) {
       actions.updateLevel(selectedWorldId, editingId, {
-        title: formTitle.trim(),
+        title: String(formOrder),
         order: formOrder,
       });
     } else {
       actions.addLevel(selectedWorldId, {
-        title: formTitle.trim(),
+        title: String(formOrder),
         order: formOrder,
         lessons: {},
       });
@@ -276,7 +272,7 @@ export function LevelsTab({ actions, worlds }: LevelsTabProps) {
             </DialogTitle>
             <DialogDescription>
               {editingId
-                ? 'Update the title and order of this level.'
+                ? 'The level title follows its display order.'
                 : `Create a new level in ${selectedWorld?.title}.`}
             </DialogDescription>
           </DialogHeader>
@@ -285,10 +281,8 @@ export function LevelsTab({ actions, worlds }: LevelsTabProps) {
               <Label htmlFor="level-title">Level Title</Label>
               <Input
                 id="level-title"
-                value={formTitle}
-                onChange={(e) => setFormTitle(e.target.value)}
-                placeholder="e.g. Level 3: Vowel Sounds"
-                autoFocus
+                value={Number.isSafeInteger(formOrder) && formOrder > 0 ? String(formOrder) : ''}
+                readOnly
               />
             </div>
             <div className="space-y-2">
@@ -297,17 +291,24 @@ export function LevelsTab({ actions, worlds }: LevelsTabProps) {
                 id="level-order"
                 type="number"
                 min={1}
+                step={1}
+                autoFocus
                 value={formOrder}
                 onChange={(e) => setFormOrder(Number(e.target.value))}
               />
             </div>
+            {levelOrderError(selectedWorld?.levels || {}, formOrder, editingId) && (
+              <p role="alert" className="text-sm text-destructive">
+                {levelOrderError(selectedWorld?.levels || {}, formOrder, editingId)}
+              </p>
+            )}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
               <X className="h-4 w-4 mr-1" />
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={!formTitle.trim()}>
+            <Button onClick={handleSave} disabled={Boolean(levelOrderError(selectedWorld?.levels || {}, formOrder, editingId))}>
               <Save className="h-4 w-4 mr-1" />
               {editingId ? 'Save Changes' : 'Create Level'}
             </Button>

@@ -358,6 +358,27 @@ export function generateId(
   return `${canonicalPrefix}_${String(highestNumber + 1).padStart(3, '0')}`;
 }
 
+export function levelIdForOrder(order: number): string {
+  return `level_${String(order).padStart(3, '0')}`;
+}
+
+export function levelOrderError(
+  levels: Record<string, Level>,
+  order: number,
+  editingId?: string | null
+): string | null {
+  if (!Number.isSafeInteger(order) || order < 1) {
+    return 'Display order must be a whole number greater than zero.';
+  }
+  const targetId = levelIdForOrder(order);
+  if (Object.entries(levels).some(([id, level]) =>
+    id !== editingId && (id === targetId || level.order === order)
+  )) {
+    return `Level ${order} already exists in this world. Choose another display order.`;
+  }
+  return null;
+}
+
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
    case 'REPLACE_STATE': {
@@ -532,14 +553,18 @@ function reducer(state: AppState, action: Action): AppState {
     case 'ADD_LEVEL': {
       const world = state.worlds[action.worldId];
       if (!world) return state;
-      const id = generateId('level', Object.keys(world.levels || {}));
+      if (levelOrderError(world.levels || {}, action.level.order)) return state;
+      const id = levelIdForOrder(action.level.order);
       return {
         ...state,
         worlds: {
           ...state.worlds,
           [action.worldId]: {
             ...world,
-            levels: { ...(world.levels || {}), [id]: action.level },
+            levels: {
+              ...(world.levels || {}),
+              [id]: { ...action.level, title: String(action.level.order) },
+            },
           },
         },
       };
@@ -549,16 +574,19 @@ function reducer(state: AppState, action: Action): AppState {
       if (!world) return state;
       const level = world.levels[action.levelId];
       if (!level) return state;
+      const updatedLevel = { ...level, ...action.level };
+      if (levelOrderError(world.levels, updatedLevel.order, action.levelId)) return state;
+      const id = levelIdForOrder(updatedLevel.order);
+      const levels = { ...world.levels };
+      delete levels[action.levelId];
+      levels[id] = { ...updatedLevel, title: String(updatedLevel.order) };
       return {
         ...state,
         worlds: {
           ...state.worlds,
           [action.worldId]: {
             ...world,
-            levels: {
-              ...world.levels,
-              [action.levelId]: { ...level, ...action.level },
-            },
+            levels,
           },
         },
       };
